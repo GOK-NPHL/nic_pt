@@ -377,16 +377,17 @@ class PTShipmentController extends Controller
         try {
 
             $shipmentsResponses = DB::table("pt_shipements")->distinct()
-                ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
-                ->join('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'ptsubmissions.id')
-                ->join('laboratories', 'ptsubmissions.lab_id', '=', 'laboratories.id')
-                ->join('users', 'ptsubmissions.user_id', '=', 'users.id');
+                // ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
+                ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
+                ->join('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'form_submissions.id')
+                ->join('laboratories', 'form_submissions.lab_id', '=', 'laboratories.id')
+                ->join('users', 'form_submissions.user_id', '=', 'users.id');
 
             if ($is_part == 1) {
-                $shipmentsResponses = $shipmentsResponses->where('ptsubmissions.lab_id', $user->laboratory_id)
-                    ->where('ptsubmissions.pt_shipements_id', $id);
+                $shipmentsResponses = $shipmentsResponses->where('form_submissions.lab_id', $user->laboratory_id)
+                    ->where('form_submissions.pt_shipment_id', $id);
             } else {
-                $shipmentsResponses = $shipmentsResponses->where('ptsubmissions.id', $id);
+                $shipmentsResponses = $shipmentsResponses->where('form_submissions.id', $id);
             }
 
             $shipmentsResponses = $shipmentsResponses->get([
@@ -401,13 +402,13 @@ class PTShipmentController extends Controller
                 "laboratories.phone_number",
                 "laboratories.lab_name",
                 "laboratories.email",
-                "ptsubmissions.id as ptsubmission_id",
-                "ptsubmissions.created_at as _first_submission_date",
-                "ptsubmissions.updated_at  as update_submission_date",
-                "ptsubmissions.testing_date",
-                "ptsubmissions.kit_expiry_date",
-                "ptsubmissions.kit_date_received",
-                "ptsubmissions.pt_lot_no",
+                "form_submissions.id as ptsubmission_id",
+                "form_submissions.created_at as _first_submission_date",
+                "form_submissions.updated_at  as update_submission_date",
+                "form_submissions.testing_date",
+                // "ptsubmissions.kit_expiry_date",
+                // "ptsubmissions.kit_date_received",
+                // "ptsubmissions.pt_lot_no",
             ]);
 
 
@@ -423,14 +424,15 @@ class PTShipmentController extends Controller
 
             //  two
             $shipmentsResponsesRlt = DB::table("pt_shipements")->distinct()
-                ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
-                ->leftJoin('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'ptsubmissions.id')
+                // ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
+                ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
+                ->leftJoin('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'form_submissions.id')
                 ->join('pt_samples', 'pt_samples.id', '=', 'pt_submission_results.sample_id');
             if ($is_part == 1) {
-                $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('ptsubmissions.lab_id', $user->laboratory_id)
-                    ->where('ptsubmissions.pt_shipements_id', $id);
+                $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.lab_id', $user->laboratory_id)
+                    ->where('form_submissions.pt_shipment_id', $id);
             } else {
-                $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('ptsubmissions.id', $id);
+                $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.id', $id);
             }
 
             $shipmentsResponsesRlt = $shipmentsResponsesRlt->get([
