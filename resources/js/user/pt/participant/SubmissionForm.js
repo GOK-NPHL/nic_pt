@@ -95,6 +95,48 @@ function SubmissionForm() {
     ];
 
     const dataDictionary = {
+        "interpretation_options": [
+            {
+                name: "SARS-CoV-2 detected",
+                id: "sars_cov_2_detected",
+            },
+            {
+                name: "SARS-CoV-2 NOT detected",
+                id: "sars_cov_2_not_detected",
+            },
+            {
+                name: "229E detected",
+                id: "229e_detected",
+            },
+            {
+                name: "HKU1 detected",
+                id: "hku1_detected",
+            },
+            {
+                name: "MERS-CoV dectected",
+                id: "mers_cov_dectected",
+            },
+            {
+                name: "NL63 detected",
+                id: "nl63_detected",
+            },
+            {
+                name: "OC43 detected",
+                id: "oc43_detected",
+            },
+            {
+                name: "SARS-CoV detected",
+                id: "sars_cov_detected",
+            },
+            {
+                name: "Negative",
+                id: "negative",
+            },
+            {
+                name: "Others (please type in free text)",
+                id: "others",
+            },
+        ],
         "conventional_real-time-options": [
             {
                 "name": "Conventional PCR",
@@ -2351,48 +2393,6 @@ function SubmissionForm() {
                 "id": "dry_heat"
             }
         ],
-        "overall-results-options": [
-            {
-                "name": "SARS-CoV-2 detected",
-                "id": "SARS-CoV-2 detected"
-            },
-            {
-                "name": "SARS-CoV-2 NOT detected",
-                "id": "SARS-CoV-2 NOT detected"
-            },
-            {
-                "name": "229E detected",
-                "id": "229E detected"
-            },
-            {
-                "name": "HKU1 detected",
-                "id": "HKU1 detected"
-            },
-            {
-                "name": "MERS-CoV dectected",
-                "id": "MERS-CoV dectected"
-            },
-            {
-                "name": "NL63 detected",
-                "id": "NL63 detected"
-            },
-            {
-                "name": "OC43 detected",
-                "id": "OC43 detected"
-            },
-            {
-                "name": "SARS-CoV detected",
-                "id": "SARS-CoV detected"
-            },
-            {
-                "name": "Negative",
-                "id": "Negative"
-            },
-            {
-                "name": "Others: please type in free text",
-                "id": "Others: please type in free text"
-            }
-        ],
         "daily-sample-load-options": [
             {
                 "name": "< 50",
@@ -2872,11 +2872,14 @@ function SubmissionForm() {
                                                                                         handleInputChange(ev)
                                                                                     }}>
                                                                                         <option value=''>Select</option>
-                                                                                        <option>Virus detected</option>
-                                                                                        <option>No virus detected</option>
-                                                                                        <option>No result</option>
-                                                                                        <option>Other (describe)</option>
+                                                                                        {dataDictionary['interpretation_options']?.map((item, index) => (
+                                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                        ))}
                                                                                     </select>
+                                                                                    {(formResults && formResults[`smpl_${sample.id}_interpretation`] && formResults[`smpl_${sample.id}_interpretation`] == dataDictionary['interpretation_options'].find(r => r.id == "others").name) &&
+                                                                                            <input type="text" onChange={(ev) => {
+                                                                                                handleInputChange(ev)
+                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`smpl_${sample.id}_interpretation_other`} value={formResults[`smpl_${sample.id}_interpretation_other`]} />}
                                                                                 </td>
                                                                                 <td style={{ verticalAlign: 'middle' }}>
                                                                                     <textarea rows={1} onInput={(ev) => {

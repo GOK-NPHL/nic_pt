@@ -64,7 +64,7 @@ use Illuminate\Support\Facades\Gate;
                                                 text-align: center;
                                                 font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
                                                 font-weight: 300">
-                    RTRI PT
+                    NIC COVID PT
                 </span>
             </a>
 
@@ -84,7 +84,7 @@ use Illuminate\Support\Facades\Gate;
                                 <a href="{{ route('participant-pt-home') }}" class="nav-link">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>
-                                        RTRI PT
+                                        NIC COVID PT
                                     </p>
                                 </a>
                             </li>
@@ -193,8 +193,8 @@ use Illuminate\Support\Facades\Gate;
         <footer class="main-footer">
             <strong>Copyright &copy; 2014- <script>
                     document.write(new Date().getFullYear());
-                </script> <a href="https://nphl.go.ke/">NPHL KNEQAS - RTRI PT</a>.</strong>
-            All rights reserved. | <a href="http://helpdesk.nphl.go.ke/">RTRI PT HELP DESK</a>
+                </script> <a href="https://nphl.go.ke/">NPHL KNEQAS - NIC COVID PT</a>.</strong>
+            All rights reserved. | <a href="http://helpdesk.nphl.go.ke/">NIC COVID PT HELP DESK</a>
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> 1.0.0
             </div>

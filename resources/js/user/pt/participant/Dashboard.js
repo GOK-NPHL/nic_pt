@@ -145,17 +145,16 @@ class Dashboard extends React.Component {
                     <td>{element.code}</td>
                     <td>{element.end_date}</td>
                     {
-                        element.form_submission_id == null ? <td style={{verticalAlign: 'middle'}}  className='text-center'>
-                            <span className="alert alert-default-success" style={{ "padding": "3px" }}>
-                                {Date.parse(element.end_date) > new Date() ?
-                                    element.is_readiness_answered == null ? 'Readiness needs filling' :
-                                        element.readiness_approval_id == null ?
-                                            'Pending readiness approval'
-                                            :
-                                            'Submit result'
-                                    :
-                                    ' Past due date'}
-                            </span>
+                        element.form_submission_id == null ? <td style={{ verticalAlign: 'middle' }} className='text-center'>
+
+                            {Date.parse(element.end_date) > new Date() ?
+                                element.is_readiness_answered == null ? <span className="alert alert-default-warning" style={{ "padding": "3px" }}>Readiness needs filling</span> :
+                                    element.readiness_approval_id == null ?
+                                        <span className="alert alert-default-success" style={{ "padding": "3px" }}>Pending readiness approval</span>
+                                        :
+                                        <span className="alert alert-default-success" style={{ "padding": "3px" }}>Ready for submission</span>
+                                :
+                                <span className="alert alert-default-success" style={{ "padding": "3px" }}>Past due date</span>}
 
 
                         </td> :
@@ -163,43 +162,14 @@ class Dashboard extends React.Component {
                     }
                     {
 
-                        <td className='text-center' style={{verticalAlign: 'middle'}}>
-
-                            {/* { element.form_submission_id ?
-                                <button
-                                    onClick={() => {
-                                        this.setState({
-                                            selectedElement: element,
-                                            selectedElementHasSubmmisions: true,
-                                            page: 'edit'
-                                        });
-                                    }}
-                                    type="button"
-                                    className="btn btn-success">
-                                    {Date.parse(element.end_date) > new Date() ? <i className="far fa-edit"></i> : <i className="fas fa-eye"></i>}
-                                    {Date.parse(element.end_date) > new Date() ? 'Edit' : 'View only'}
-                                </button>
-                                :
-                                <button onClick={() => {
-                                    if (element.is_readiness_answered == null) {
-                                        window.location.assign('get-readiness-form/' + element.readiness_id)
-                                    } else {
-                                        this.setState({
-                                            selectedElement: element,
-                                            selectedElementHasSubmmisions: false,
-                                            page: 'edit'
-                                        });
-                                    }
-                                }} type="button" className="btn btn-success">
-                                    {Date.parse(element.end_date) > new Date() ? <i className="fas fa-paper-plane"></i> : <i className="fas fa-eye"></i>}
-                                    {Date.parse(element.end_date) > new Date() ?
-                                        element.is_readiness_answered == null ? 'Fill readiness' : element.readiness_approval_id == null ? ' View only' : ' Submit'
-                                        : 'View only'}
-                                </button>
-                            } */}
-                            <a href={`/submissions/${element.pt_shipements_id}/new`} className="d-none d-sm-inline-block btn btn-success shadow-sm">
-                                &nbsp;{ element.form_submission_id ? "Edit Submission" : "Submit Entry" }&nbsp;
-                            </a>
+                        <td className='text-center' style={{ verticalAlign: 'middle' }}>
+                            {Date.parse(element.end_date) > new Date() ?
+                                element.is_readiness_answered == null ? 
+                                <span className="alert alert-default-warning" style={{ "padding": "3px", borderColor: 'goldenrod' }}> &nbsp; &nbsp; Fill readines first &nbsp; &nbsp; </span> : 
+                                element.readiness_approval_id == null ? 
+                                <span className="alert alert-default-warning" style={{ "padding": "3px", borderColor: 'goldenrod'  }}> &nbsp; &nbsp; Please wait for readiness to be approved &nbsp; &nbsp; </span> : 
+                                <a href={`/submissions/${element.pt_shipements_id}/new`} className="d-none d-sm-inline-block btn btn-success shadow-sm"> &nbsp;{element.form_submission_id ? "Edit Submission" : "Submit Entry"}&nbsp; </a> : 
+                                ''}
 
                         </td>
                     }
@@ -233,7 +203,7 @@ class Dashboard extends React.Component {
 
         let viewControlButton = <div className="row">
             <div className="col-sm-12 mt-3">
-                <h3 className="float-left">RTRI PT  {this.state.listingName}</h3>
+                <h3 className="float-left">NIC COVID PT  {this.state.listingName}</h3>
 
             </div>
 

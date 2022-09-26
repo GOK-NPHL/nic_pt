@@ -84,7 +84,7 @@
 
                         <h1>KENYA EXTERNAL QUALITY ASSESSMENT SCHEME (KNEQAS)</h1>
                         <p>Monitoring and improving the quality of HIV results generated from your laboratory</p>
-                        <h3>RTRI PT</h3>
+                        <h3>NIC COVID PT</h3>
 
 
                         <p>For any queries on the use of the system, please create a ticket on the

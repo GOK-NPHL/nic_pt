@@ -445,7 +445,7 @@ class SubmitResults extends React.Component {
 
                     <div className="col-sm-12 float-left">
                         <h1>
-                            RTRI PT Submission form
+                            NIC COVID PT Submission form
                             {
                                 Date.parse(this.state.endDate) > new Date() ?
                                     this.props.shipment.readiness_approval_id == null ?

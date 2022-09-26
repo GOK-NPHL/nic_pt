@@ -1,4 +1,4 @@
-# RTRI PT
+# NIC COVID PT
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -21,7 +21,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-The RTRI PT
+The NIC COVID PT
 .
 
 <!-- GETTING STARTED -->
