@@ -1,0 +1,11 @@
+.unstrip tr:nth-child(2n) {
+    background-color: white;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+/* tr:nth-child(even) {
+    background-color: #dddddd;
+  } */

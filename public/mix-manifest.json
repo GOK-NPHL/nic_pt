@@ -1,0 +1,9 @@
+{
+    "/js/adminlte.js": "/js/adminlte.js",
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/css/adminlte.min.css": "/css/adminlte.min.css",
+    "/css/dataTables.bootstrap4.min.css": "/css/dataTables.bootstrap4.min.css",
+    "/css/jquery.dataTables.min.css": "/css/jquery.dataTables.min.css",
+    "/css/OverlayScrollbars.min.css": "/css/OverlayScrollbars.min.css"
+}

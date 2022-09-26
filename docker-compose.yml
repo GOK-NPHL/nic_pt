@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  
+  rtript_db:
+    container_name: rtript_db
+    restart: unless-stopped
+    ports:
+     - "3337:3306"
+    build:
+      context: ./
+      dockerfile: docker-compose/mysql/Dockerfile
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: rtript_mysql
+    volumes:
+      - rtript_mysql:/var/lib/mysql
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+
+  rtript_app:
+    build:
+      args:
+        user: duncan
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: rtript_app
+    container_name: rtript_app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+   
+  rtript_nginx:
+    container_name: rtript_nginx
+    restart: unless-stopped
+    ports:
+      - 8095:80
+    build:
+        context: ./
+        dockerfile: docker-compose/nginx/Dockerfile
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx/:/etc/nginx/conf.d/
+
+volumes:
+  rtript_mysql:
