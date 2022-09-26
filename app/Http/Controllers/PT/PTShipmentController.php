@@ -342,9 +342,10 @@ class PTShipmentController extends Controller
         try {
 
             $shipmentsResponses = DB::table("pt_shipements")->distinct()
-                ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
-                ->join('laboratories', 'ptsubmissions.lab_id', '=', 'laboratories.id')
-                ->join('users', 'ptsubmissions.user_id', '=', 'users.id')
+                // ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
+                ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
+                ->join('laboratories', 'form_submissions.lab_id', '=', 'laboratories.id')
+                ->join('users', 'form_submissions.user_id', '=', 'users.id')
                 ->where('pt_shipements.id', $request->id)
                 ->get([
                     "pt_shipements.id",
@@ -358,14 +359,14 @@ class PTShipmentController extends Controller
                     "laboratories.phone_number",
                     "laboratories.lab_name",
                     "laboratories.email",
-                    "ptsubmissions.id as ptsubmission_id",
-                    "ptsubmissions.created_at",
-                    "ptsubmissions.updated_at",
+                    "form_submissions.id as ptsubmission_id",
+                    "form_submissions.created_at",
+                    "form_submissions.updated_at",
                 ]);
 
             return $shipmentsResponses;
         } catch (Exception $ex) {
-            return response()->json(['Message' => 'Could fetch ptsubmissions list: ' . $ex->getMessage()], 500);
+            return response()->json(['Message' => 'Could fetch submissions list: ' . $ex->getMessage()], 500);
         }
     }
 
