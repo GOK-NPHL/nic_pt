@@ -18,8 +18,8 @@ class CreateFormSubmissionsTable extends Migration
             $table->date('panel_receipt_date');
             $table->date('reporting_date');
             $table->integer('pt_shipment_id');
-            $table->integer('tested_by');
-            $table->integer('submitted_by');
+            $table->string('tested_by');
+            $table->string('submitted_by');
             $table->integer('user_id');
             $table->integer('lab_id');
             $table->json('result');

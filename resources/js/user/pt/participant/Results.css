@@ -14,3 +14,7 @@ table.table.results {
 .table.results tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+.form-control{
+  background-color: #f5fafb;
+}

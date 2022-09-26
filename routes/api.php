@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PT\PTReadinessController;
 use App\Http\Controllers\PT\PTShipmentController;
@@ -33,6 +34,11 @@ Route::get('/get_submissions', [Submission::class, 'getSubmissions']);
 Route::get('/get_submission_by_id/{id}', [Submission::class, 'getSubmissionById']);
 Route::post('/update_submission', [Submission::class, 'updateSubmission']);
 
+Route::get('all-submissions', [FormSubmissionController::class, 'getSubmissions'])->name('get-participant-submission')->middleware('auth:admin');
+Route::get('submission/{id}', [FormSubmissionController::class, 'getSubmission'])->name('get-participant-submission')->middleware('auth');
+Route::get('submission/shipment/{id}', [FormSubmissionController::class, 'getUserSubmissionsByShipment'])->name('get-participant-submission')->middleware('auth');
+Route::post('submissions/{shipmentId}/new', [FormSubmissionController::class, 'storeSubmission'])->name('new-participant-submission')->middleware('auth');
+Route::put('submissions/{shipmentId}/edit/{submissionId}', [FormSubmissionController::class, 'updateSubmission'])->name('update-participant-submission')->middleware('auth');
 
 Route::get('/get_admin_users', [QCAdminUsersController::class, 'getAdminUsers']);
 Route::get('/get_admin_user/{id}', [AdminAuthController::class, 'getAdminUser']);

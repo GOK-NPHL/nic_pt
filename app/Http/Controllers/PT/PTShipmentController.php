@@ -225,105 +225,110 @@ class PTShipmentController extends Controller
 
         // try {
 
-            $shipments = PtShipement::select( //when using labs
-                "pt_shipements.id",
-                "pt_shipements.id as pt_shipements_id",
-                "pt_shipements.round_name",
-                "pt_shipements.code",
-                "pt_shipements.start_date",
-                "pt_shipements.end_date",
-                "pt_shipements.test_instructions",
-                "pt_samples.id as sample_id",
-                "pt_samples.name as sample_name",
-                "ptsubmissions.id as submission_id",
-                DB::raw("1 as is_readiness_answered"),
-                DB::raw("null as readiness_id"),
-                DB::raw("1 as readiness_approval_id")
+        $shipments = PtShipement::select( //when using labs
+            "pt_shipements.id",
+            "pt_shipements.id as pt_shipements_id",
+            "pt_shipements.round_name",
+            "pt_shipements.code",
+            "pt_shipements.start_date",
+            "pt_shipements.end_date",
+            "pt_shipements.test_instructions",
+            "pt_samples.id as sample_id",
+            "pt_samples.name as sample_name",
+            "ptsubmissions.id as submission_id",
+            "form_submissions.id as form_submission_id",
+            DB::raw("1 as is_readiness_answered"),
+            DB::raw("null as readiness_id"),
+            DB::raw("1 as readiness_approval_id")
 
-            )
-                ->leftJoin('ptsubmissions', 'pt_shipements.id', '=', 'ptsubmissions.pt_shipements_id')
-                ->join('laboratory_pt_shipement', 'laboratory_pt_shipement.pt_shipement_id', '=', 'pt_shipements.id')
-                ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
-                ->join('laboratories', 'laboratory_pt_shipement.laboratory_id', '=', 'laboratories.id')
-                ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
-                ->where('users.id', $user->id);
+        )
+            ->leftJoin('ptsubmissions', 'pt_shipements.id', '=', 'ptsubmissions.pt_shipements_id')
+            ->leftJoin('form_submissions', 'pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
+            ->join('laboratory_pt_shipement', 'laboratory_pt_shipement.pt_shipement_id', '=', 'pt_shipements.id')
+            ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
+            ->join('laboratories', 'laboratory_pt_shipement.laboratory_id', '=', 'laboratories.id')
+            ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
+            ->where('users.id', $user->id);
 
-            $shipments2 = PtShipement::select( //when using readiness
-                "pt_shipements.id",
-                "pt_shipements.id as pt_shipements_id",
-                "pt_shipements.round_name",
-                "pt_shipements.code",
-                "pt_shipements.start_date",
-                "pt_shipements.end_date",
-                "pt_shipements.test_instructions",
-                "pt_samples.id as sample_id",
-                "pt_samples.name as sample_name",
-                "ptsubmissions.id as submission_id",
-                "readiness_answers.id as is_readiness_answered", //check if readiness for this shipment id filled
-                "pt_shipements.readiness_id as readiness_id",
-                "readiness_approvals.id as readiness_approval_id"
+        $shipments2 = PtShipement::select( //when using readiness
+            "pt_shipements.id",
+            "pt_shipements.id as pt_shipements_id",
+            "pt_shipements.round_name",
+            "pt_shipements.code",
+            "pt_shipements.start_date",
+            "pt_shipements.end_date",
+            "pt_shipements.test_instructions",
+            "pt_samples.id as sample_id",
+            "pt_samples.name as sample_name",
+            "ptsubmissions.id as submission_id",
+            "form_submissions.id as form_submission_id",
+            "readiness_answers.id as is_readiness_answered", //check if readiness for this shipment id filled
+            "pt_shipements.readiness_id as readiness_id",
+            "readiness_approvals.id as readiness_approval_id"
+        )
 
-            )
-                ->leftJoin('ptsubmissions', 'pt_shipements.id', '=', 'ptsubmissions.pt_shipements_id')
-                ->join('laboratory_readiness', 'laboratory_readiness.readiness_id', '=', 'pt_shipements.readiness_id')
-                ->leftJoin('readiness_answers',  'laboratory_readiness.readiness_id', '=',  'readiness_answers.readiness_id')
-                ->leftJoin('readiness_approvals', 'readiness_answers.laboratory_id', '=',  'readiness_approvals.lab_id')
-                ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
-                ->join('laboratories', 'laboratory_readiness.laboratory_id', '=', 'laboratories.id')
-                ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
+            ->leftJoin('ptsubmissions', 'pt_shipements.id', '=', 'ptsubmissions.pt_shipements_id')
+            ->leftJoin('form_submissions', 'pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
+            ->join('laboratory_readiness', 'laboratory_readiness.readiness_id', '=', 'pt_shipements.readiness_id')
+            ->leftJoin('readiness_answers',  'laboratory_readiness.readiness_id', '=',  'readiness_answers.readiness_id')
+            ->leftJoin('readiness_approvals', 'readiness_answers.laboratory_id', '=',  'readiness_approvals.lab_id')
+            ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
+            ->join('laboratories', 'laboratory_readiness.laboratory_id', '=', 'laboratories.id')
+            ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
 
-                ->where('users.id', $user->id)
-                ->union($shipments)
-                // ->orderBy('pt_shipements.end_date')
-                ->get();
+            ->where('users.id', $user->id)
+            ->union($shipments)
+            // ->orderBy('pt_shipements.end_date')
+            ->get();
 
-            $payload = [];
-            $sampleIds = [];
+        $payload = [];
+        $sampleIds = [];
 
-            foreach ($shipments2 as $lab) {
+        foreach ($shipments2 as $lab) {
 
-                if ($lab->round_name == "round 20") {
-                    // Log::info($lab);
+            if ($lab->round_name == "round 20") {
+                // Log::info($lab);
+            }
+            if (array_key_exists($lab->id, $payload)) {
+                if (!array_key_exists($lab->sample_id, $sampleIds)) {
+                    $payload[$lab->id]['samples'][] = ['sample_name' => $lab->sample_name, 'sample_id' => $lab->sample_id];
+                    $sampleIds[$lab->sample_id] = 1;
                 }
-                if (array_key_exists($lab->id, $payload)) {
-                    if (!array_key_exists($lab->sample_id, $sampleIds)) {
-                        $payload[$lab->id]['samples'][] = ['sample_name' => $lab->sample_name, 'sample_id' => $lab->sample_id];
-                        $sampleIds[$lab->sample_id] = 1;
-                    }
-                } else {
+            } else {
 
-                    if (!array_key_exists($lab->sample_id, $sampleIds)) {
-                        $sampleIds[$lab->sample_id] = 1;
-                        $payload[$lab->id] = [];
-                        $payload[$lab->id]['samples'] = [];
-                        $payload[$lab->id]['samples'][] = ['sample_name' => $lab->sample_name, 'sample_id' => $lab->sample_id];
+                if (!array_key_exists($lab->sample_id, $sampleIds)) {
+                    $sampleIds[$lab->sample_id] = 1;
+                    $payload[$lab->id] = [];
+                    $payload[$lab->id]['samples'] = [];
+                    $payload[$lab->id]['samples'][] = ['sample_name' => $lab->sample_name, 'sample_id' => $lab->sample_id];
 
-                        $payload[$lab->id]['test_instructions'] = $lab->test_instructions;
-                        $payload[$lab->id]['id'] = $lab->id;
-                        $payload[$lab->id]['pt_shipements_id'] = $lab->pt_shipements_id;
-                        $payload[$lab->id]['start_date'] = $lab->start_date;
-                        $payload[$lab->id]['code'] = $lab->code;
-                        $payload[$lab->id]['end_date'] = $lab->end_date;
-                        $payload[$lab->id]['round_name'] = $lab->round_name;
-                        $payload[$lab->id]['submission_id'] = $lab->submission_id;
-                        $payload[$lab->id]['is_readiness_answered'] = $lab->is_readiness_answered;
-                        $payload[$lab->id]['readiness_id'] = $lab->readiness_id;
-                        $payload[$lab->id]['readiness_approval_id'] = $lab->readiness_approval_id;
-                    }
+                    $payload[$lab->id]['test_instructions'] = $lab->test_instructions;
+                    $payload[$lab->id]['id'] = $lab->id;
+                    $payload[$lab->id]['pt_shipements_id'] = $lab->pt_shipements_id;
+                    $payload[$lab->id]['start_date'] = $lab->start_date;
+                    $payload[$lab->id]['code'] = $lab->code;
+                    $payload[$lab->id]['end_date'] = $lab->end_date;
+                    $payload[$lab->id]['round_name'] = $lab->round_name;
+                    $payload[$lab->id]['submission_id'] = $lab->submission_id;
+                    $payload[$lab->id]['form_submission_id'] = $lab->form_submission_id;
+                    $payload[$lab->id]['is_readiness_answered'] = $lab->is_readiness_answered;
+                    $payload[$lab->id]['readiness_id'] = $lab->readiness_id;
+                    $payload[$lab->id]['readiness_approval_id'] = $lab->readiness_approval_id;
                 }
             }
+        }
 
-            // if a shipment id has been passed, return only that shipment
-            if ($request->has('shipment_id')) {
-                $shipment_id = $request->input('shipment_id');
-                if (array_key_exists($shipment_id, $payload)) {
-                    return response()->json($payload[$shipment_id]);
-                } else {
-                    return response()->json(['Message' => 'No data found matching the given shipment ID'], 404);
-                }
+        // if a shipment id has been passed, return only that shipment
+        if ($request->has('shipment_id')) {
+            $shipment_id = $request->input('shipment_id');
+            if (array_key_exists($shipment_id, $payload)) {
+                return response()->json($payload[$shipment_id]);
+            } else {
+                return response()->json(['Message' => 'No data found matching the given shipment ID'], 404);
             }
+        }
 
-            return $payload;
+        return $payload;
         // } catch (Exception $ex) {
         //     Log::error($ex);
         //     return response()->json(['Message' => 'Could fetch samples: ' . $ex->getMessage()], 500);

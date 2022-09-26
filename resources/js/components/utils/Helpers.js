@@ -708,3 +708,31 @@ export async function DeleteFile(fileId) {
         return err.response
     }
 }
+
+export async function SubmitPT(data, shipID, submissionType, subId) {
+    let response;
+    try {
+        let url = `${settings.serverBaseApi}/submissions/${shipID}/new`;
+        if (submissionType == 'update') {
+            url = `${settings.serverBaseApi}/submissions/${shipID}/edit/${subId}`;
+        }
+        response = await axios({
+            method: submissionType && submissionType == 'update' ? 'put' : 'post',
+            url: url,
+            data: data
+        });
+        return response;
+    } catch (err) {
+        return err.response
+    }
+}
+export async function GetSubmission(subId) {
+    let response;
+    try {
+        response = await axios.get(`${settings.serverBaseApi}/submission/${subId}`);
+        const subDt = response.data;
+        return subDt;
+    } catch (err) {
+        return err.response
+    }
+}

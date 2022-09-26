@@ -140,13 +140,13 @@ class Dashboard extends React.Component {
 
 
                 let datRow = <tr key={index++}>
-                    <th scope="row">{element.submission_id == null ? unsubmittedIndex++ : submittedIndex++}</th>
+                    <th scope="row">{element.form_submission_id == null ? unsubmittedIndex++ : submittedIndex++}</th>
                     <td>{element.round_name}</td>
                     <td>{element.code}</td>
                     <td>{element.end_date}</td>
                     {
-                        element.submission_id == null ? <td >
-                            <span style={{ "background-color": "green", "padding": "3px", "border-radius": "2px", "color": "white" }}>
+                        element.form_submission_id == null ? <td style={{verticalAlign: 'middle'}}  className='text-center'>
+                            <span className="alert alert-default-success" style={{ "padding": "3px" }}>
                                 {Date.parse(element.end_date) > new Date() ?
                                     element.is_readiness_answered == null ? 'Readiness needs filling' :
                                         element.readiness_approval_id == null ?
@@ -163,82 +163,49 @@ class Dashboard extends React.Component {
                     }
                     {
 
-                        <td>
+                        <td className='text-center' style={{verticalAlign: 'middle'}}>
 
-                            {
-
-                                element.submission_id ?
-
-                                    <button
-                                        onClick={() => {
-                                            this.setState({
-                                                selectedElement: element,
-                                                selectedElementHasSubmmisions: true,
-                                                page: 'edit'
-                                            });
-                                        }}
-                                        type="button"
-                                        className="btn btn-success">
-                                        {
-                                            Date.parse(element.end_date) > new Date() ? <i className="far fa-edit"></i>
-                                                : <i className="fas fa-eye"></i>
-                                        }
-                                        {
-                                            Date.parse(element.end_date) > new Date() ?
-                                                ' Edit'
-                                                :
-                                                ' View only'
-                                        }
-                                    </button>
-                                    :
-                                    <button
-                                        onClick={() => {
-                                            if (element.is_readiness_answered == null) {
-                                                window.location.assign('get-readiness-form/' + element.readiness_id)
-                                            } else {
-                                                this.setState({
-                                                    selectedElement: element,
-                                                    selectedElementHasSubmmisions: false,
-                                                    page: 'edit'
-                                                });
-                                            }
-
-
-                                        }}
-
-                                        type="button"
-                                        className="btn btn-success">
-
-                                        {
-                                            Date.parse(element.end_date) > new Date() ? <i className="fas fa-paper-plane"></i>
-                                                : <i className="fas fa-eye"></i>
-                                        }
-                                        {Date.parse(element.end_date) > new Date() ?
-                                            element.is_readiness_answered == null ?
-                                                ' Fill readiness'
-                                                :
-                                                element.readiness_approval_id == null ? ' View only' : ' Submit'
-
-                                            :
-                                            ' View only'}
-                                    </button>
-
-                            }
-                            {/* <a
-                                onClick={() => {
-                                    this.setState({
-                                        selectedElement: element
-                                    });
-                                    $('#deleteConfirmModal').modal('toggle');
-                                }} className="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">
-                                <i className="fas fa-user-times"></i>
-                            </a> */}
+                            {/* { element.form_submission_id ?
+                                <button
+                                    onClick={() => {
+                                        this.setState({
+                                            selectedElement: element,
+                                            selectedElementHasSubmmisions: true,
+                                            page: 'edit'
+                                        });
+                                    }}
+                                    type="button"
+                                    className="btn btn-success">
+                                    {Date.parse(element.end_date) > new Date() ? <i className="far fa-edit"></i> : <i className="fas fa-eye"></i>}
+                                    {Date.parse(element.end_date) > new Date() ? 'Edit' : 'View only'}
+                                </button>
+                                :
+                                <button onClick={() => {
+                                    if (element.is_readiness_answered == null) {
+                                        window.location.assign('get-readiness-form/' + element.readiness_id)
+                                    } else {
+                                        this.setState({
+                                            selectedElement: element,
+                                            selectedElementHasSubmmisions: false,
+                                            page: 'edit'
+                                        });
+                                    }
+                                }} type="button" className="btn btn-success">
+                                    {Date.parse(element.end_date) > new Date() ? <i className="fas fa-paper-plane"></i> : <i className="fas fa-eye"></i>}
+                                    {Date.parse(element.end_date) > new Date() ?
+                                        element.is_readiness_answered == null ? 'Fill readiness' : element.readiness_approval_id == null ? ' View only' : ' Submit'
+                                        : 'View only'}
+                                </button>
+                            } */}
+                            <a href={`/submissions/${element.pt_shipements_id}/new`} className="d-none d-sm-inline-block btn btn-success shadow-sm">
+                                &nbsp;{ element.form_submission_id ? "Edit Submission" : "Submit Entry" }&nbsp;
+                            </a>
 
                         </td>
                     }
 
                 </tr>;
-                if (element.submission_id == null) {
+                if (element.form_submission_id == null) {
                     tableElem.push(datRow);
                 } else {
                     submittedTableElem.push(datRow);
@@ -333,7 +300,7 @@ class Dashboard extends React.Component {
                         className="form-control float-right w-25 mb-1" placeholder="search shipment"></input>
                 </div>
 
-                <table className="table table-striped table-sm  table-hover">
+                <table className="table table-striped table-sm table-bordered table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -363,7 +330,14 @@ class Dashboard extends React.Component {
                     onChange={this.handleSubmittedPageChange}
                 />
             </div>
-
+            {/* {(typeof window !== 'undefined' && ["localhost", "127.0.0.1"].includes(window.location.hostname)) && <div className='col-md-12 p-2 rounded text-sm text-muted' style={{ backgroundColor: '#f5fafb' }}>
+                    <small>
+                        <details open>
+                            <summary>state.data</summary>
+                            <pre style={{ whiteSpace: 'pre-wrap' }} className="text-muted">{JSON.stringify(this.state.data, null, 2)}</pre>
+                        </details>
+                    </small>
+                </div>} */}
         </div>;
 
         //submission_id
