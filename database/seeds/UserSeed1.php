@@ -16,14 +16,41 @@ class UserSeed extends Seeder
         $dataUser = array(
 
             array(
-                'name' => 'Recency',
-                'email' => 'eqa@nphl.go.ke',
+                'name' => 'Ndiithi Wachira',
+                'email' => 'duncanndiithi@yahoo.com',
                 'second_name' => 'User',
                 'has_qc_access' => true,
                 'has_pt_access' => true,
                 'phone_number'=> '0710238034',
-                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm',
-                'laboratory_id' => 0,
+                'password' => '$2y$10$ELXDs9zNO0RfvA8ZLotQJuZm96QHA/B2WLClEmlz/wvsjiCCF6FjK',
+                'laboratory_id' => 1,
+                'is_active' => true,
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime,
+            ),
+            array(
+                'name' => 'Benzer Bett',
+                'email' => 'benzerbett@yahoo.com',
+                'second_name' => 'User',
+                'has_qc_access' => true,
+                'has_pt_access' => true,
+                'phone_number'=> '0710202020',
+                'password' => '$2y$10$dXeWgXS0KsBbFSrNmfBn2u6WCuZe2fq1nQhRm4t2zqraY61cg.w..',
+                'laboratory_id' => 1,
+                'is_active' => true,
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime,
+            ),
+            array(
+                'name' => 'Bett',
+                'email' => 'benzerbett@ymail.com',
+                'second_name' => 'User',
+                'has_qc_access' => true,
+                'has_pt_access' => true,
+                'phone_number'=> '0712909090',
+                'password' => '$2y$10$1zaJrReHthJ9lTFQ3Cot8.y1jFZrNpUlB9bsMa4LzZlwKf.8.E4z.',
+                'laboratory_id' => 1,
+                // 'roles' => json_encode(array(3)),
                 'is_active' => true,
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
@@ -41,13 +68,32 @@ class UserSeed extends Seeder
                 'is_admin' => true,
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
-            )
+            ),
+            array(
+                'name' => 'Bett',
+                'email' => 'benzerbett@gmail.com',
+                'password' => '$2y$10$DivpxnNxE9wBKoxXTyWSHus1GvCWFdZjevtohazhruxzG8HtUPh3W',
+                'phone_number' => '0739611262',
+                'is_admin' => true,
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime,
+            ),
+
         );
 
 
         $authObj = new User();
         User::query()->truncate();
         $authObj->insert($dataUser);
+
+        //update user roles for all users for fresh install
+        if (env('APP_ENV') == 'local') {
+            $users = User::all();
+            foreach ($users as $user) {
+                $user->roles = json_encode(array(3));
+                $user->save();
+            }
+        }
 
         $authObjAdmin = new Admin();
         Admin::query()->truncate();

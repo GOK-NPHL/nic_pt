@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Gate;
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="MOH DLS NPHL - Laboratory EQA - HIV Recency Proficiency Testing.">
+    <meta name="description" content="MOH DLS NPHL - Laboratory EQA - NIC SARS-Cov2 Proficiency Testing.">
     <meta name="author" content="NPHL ICT" <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -190,7 +190,7 @@ use Illuminate\Support\Facades\Gate;
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-white">
             <strong>Copyright &copy; 2014- <script>
                     document.write(new Date().getFullYear());
                 </script> <a href="https://nphl.go.ke/">NPHL KNEQAS - NIC COVID PT</a>.</strong>

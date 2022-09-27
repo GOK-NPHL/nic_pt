@@ -52,7 +52,18 @@ export async function FetchUserSamples(shipId) {
         // Handle Error Here
         return err.response
     }
+}
+export async function FetchSamplesByShipment(shipId) {
 
+    try {
+        let url = `${settings.serverBaseApi}/get_samples_by_shipment/${shipId}`
+        const response = await axios.get(url);
+        const responseData = response.data;
+        return responseData;
+    } catch (err) {
+        // Handle Error Here
+        return err.response
+    }
 }
 
 export async function FetchSampleResponseResultById(id) {
@@ -710,14 +721,17 @@ export async function DeleteFile(fileId) {
 }
 
 export async function SubmitPT(data, shipID, submissionType, subId) {
+    // console.log('Submitting PT: submissionType: ' + submissionType + ' subId: ' + subId);
     let response;
     try {
         let url = `${settings.serverBaseApi}/submissions/${shipID}/new`;
-        if (submissionType == 'update') {
+        let method = 'post';
+        if (submissionType === 'update' && subId !== null && subId !== undefined && subId !== '') {
             url = `${settings.serverBaseApi}/submissions/${shipID}/edit/${subId}`;
+            method = 'put';
         }
         response = await axios({
-            method: submissionType && submissionType == 'update' ? 'put' : 'post',
+            method: method,
             url: url,
             data: data
         });

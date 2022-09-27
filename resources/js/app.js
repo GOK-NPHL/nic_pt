@@ -42,6 +42,7 @@ require('./user/pt/participant/SubmissionForm');
 require('./user/pt/reports/ListShipmentReport');
 require('./user/pt/reports/ListShipmentResponseReport');
 require('./user/pt/reports/PTPerformanceReport');
+require('./user/pt/shipment/SubmissionView');
 
 
 require('./user/general/Dashboard');

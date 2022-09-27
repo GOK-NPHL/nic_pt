@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\FormSubmission;
+use App\PtSample;
+use App\PtSubmissionResult;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +13,7 @@ class FormSubmissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('web');
     }
 
 
@@ -59,6 +61,21 @@ class FormSubmissionController extends Controller
                 'lab_id' => $user->laboratory_id,
             ]);
 
+            // save the result_interpretation from the result json in the pt_submission_results table for each sample
+            $samples = PtSample::where('ptshipment_id', $request->pt_shipment_id)->get();
+            if ($samples) {
+                foreach ($samples as $sample) {
+                    $result = $request->interpretations;
+                    $interpretation = $result[$sample->id]['interpretation'] ?? null;
+                    PtSubmissionResult::create([
+                        'ptsubmission_id' => $submission->id,
+                        'sample_id' => $sample->id,
+                        'interpretation' => $interpretation,
+                    ]);
+                }
+            }
+            
+
             dd($request->all());
 
             return response()->json([
@@ -94,6 +111,19 @@ class FormSubmissionController extends Controller
                 'submitted_by' => $request->submitted_by,
                 'result' => $request->result,
             ]);
+
+            $samples = PtSample::where('ptshipment_id', $request->pt_shipment_id)->get();
+            if ($samples) {
+                foreach ($samples as $sample) {
+                    $result = $request->interpretations;
+                    $interpretation = $result[$sample->id]['interpretation'] ?? null;
+                    PtSubmissionResult::create([
+                        'ptsubmission_id' => $submission->id,
+                        'sample_id' => $sample->id,
+                        'interpretation' => $interpretation,
+                    ]);
+                }
+            }
 
             return response()->json([
                 'success' => true,

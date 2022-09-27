@@ -147,12 +147,10 @@ use Illuminate\Support\Facades\Gate;
         <div style="background-color: white;" class="">
             <!-- Content Header (Page header) -->
             <div class="content-header">
-                <div class="container">
+                <div class="container-fluid px-3">
 
                     <!-- Begin Page Content -->
-                    <div class="container-fluid">
-                        @yield('content')
-                    </div>
+                    @yield('content')
 
                 </div><!-- /.container-fluid -->
             </div>

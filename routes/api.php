@@ -35,8 +35,8 @@ Route::get('/get_submission_by_id/{id}', [Submission::class, 'getSubmissionById'
 Route::post('/update_submission', [Submission::class, 'updateSubmission']);
 
 Route::get('all-submissions', [FormSubmissionController::class, 'getSubmissions'])->name('get-participant-submission')->middleware('auth:admin');
-Route::get('submission/{id}', [FormSubmissionController::class, 'getSubmission'])->name('get-participant-submission')->middleware('auth');
-Route::get('submission/shipment/{id}', [FormSubmissionController::class, 'getUserSubmissionsByShipment'])->name('get-participant-submission')->middleware('auth');
+Route::get('submission/{id}', [FormSubmissionController::class, 'getSubmission'])->name('get-participant-submission')->middleware('web');
+Route::get('submission/shipment/{id}', [FormSubmissionController::class, 'getUserSubmissionsByShipment'])->name('get-participant-submission')->middleware('web');
 Route::post('submissions/{shipmentId}/new', [FormSubmissionController::class, 'storeSubmission'])->name('new-participant-submission')->middleware('auth');
 Route::put('submissions/{shipmentId}/edit/{submissionId}', [FormSubmissionController::class, 'updateSubmission'])->name('update-participant-submission')->middleware('auth');
 
@@ -69,7 +69,8 @@ Route::post('/create_shipment', [PTShipmentController::class, 'saveShipment'])->
 Route::post('/update_shipment', [PTShipmentController::class, 'updateShipment'])->name('update_shipment')->middleware('auth:admin');
 Route::get('/get_shipment_by_id/{id}', [PTShipmentController::class, 'getShipmentById'])->middleware('auth:admin');
 
-Route::get('/get_user_samples', [PTShipmentController::class, 'getUserSamples'])->middleware('auth');
+Route::get('/get_user_samples', [PTShipmentController::class, 'getUserSamples'])->middleware('web');
+Route::get('/get_samples_by_shipment/{id}', [PTShipmentController::class, 'getSamplesByShipment'])->middleware('web');
 Route::get('/get_counties', [CommonsController::class, 'getCounties']);
 
 Route::get('/get_participant_demographics', [ParticipantController::class, 'getParticipantDemographics']);

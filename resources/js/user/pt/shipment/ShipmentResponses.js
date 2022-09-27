@@ -31,11 +31,11 @@ class ShipmentResponses extends React.Component {
             path: `/get-shipment-responses/:shipmentId`,
         });
 
-        if (this.props.page == 'report') {
+        // if (this.props.page == 'report') {
+        if (!pathObject || pathObject == null) {
             pathObject = matchPath(pathname, {
                 path: `/get-shipment-report-responses/:shipmentId`,
             });
-
         }
 
         if (pathObject) {
@@ -108,6 +108,15 @@ class ShipmentResponses extends React.Component {
 
                             {
                                 this.props.page == 'report' ?
+                                <>
+                                    <a
+                                        onClick={() => {
+                                            window.location.assign('/view-shipment-response/' + element.id + '/' + element.ptsubmission_id)
+                                        }}
+                                        data-toggle="tooltip" data-placement="top" title="View submission"
+                                        className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white">
+                                        <i className="fas fa-file"></i> View entry
+                                    </a> &nbsp;
                                     <a
                                         onClick={() => {
                                             window.location.assign('/get-shipment-response-performance/' + element.ptsubmission_id)
@@ -115,7 +124,8 @@ class ShipmentResponses extends React.Component {
                                         data-toggle="tooltip" data-placement="top" title="View performance report"
                                         className="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm text-white">
                                         <i className="fas fa-file-pdf"></i> Performance
-                                    </a>
+                                    </a> &nbsp;
+                                </>
                                     :
                                     <a
                                         onClick={() => {

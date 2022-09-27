@@ -405,7 +405,7 @@ class PTShipmentController extends Controller
                 "form_submissions.id as ptsubmission_id",
                 "form_submissions.created_at as _first_submission_date",
                 "form_submissions.updated_at  as update_submission_date",
-                "form_submissions.testing_date",
+                // "form_submissions.testing_date",
                 // "ptsubmissions.kit_expiry_date",
                 // "ptsubmissions.kit_date_received",
                 // "ptsubmissions.pt_lot_no",
@@ -413,10 +413,10 @@ class PTShipmentController extends Controller
 
 
             //  one
-            $hipmentsRefResult = DB::table("pt_shipements")->distinct()
+            $shipmentsRefResult = DB::table("pt_shipements")->distinct()
                 ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id');
 
-            $hipmentsRefResult = $hipmentsRefResult->get([
+            $shipmentsRefResult = $shipmentsRefResult->get([
                 "pt_samples.reference_result as reference_result",
                 "pt_samples.name as sample_name"
             ]);
@@ -442,15 +442,25 @@ class PTShipmentController extends Controller
 
 
             $dataPayload = [];
-            foreach ($hipmentsRefResult as $refRslt) {
-                foreach ($shipmentsResponsesRlt as $rslt) {
-                    if ($refRslt->sample_name == $rslt->sample_name) {
-                        $data = [];
-                        $data['result_interpretation'] = $rslt->result_interpretation;
-                        $data['sample_name'] = $refRslt->sample_name;
-                        $data['reference_result'] = $refRslt->reference_result;
-                        $dataPayload[] = $data;
-                    }
+            // foreach ($shipmentsResponsesRlt as $rslt) {
+            //         $data = [];
+            //         $data['result_interpretation'] = $rslt->result_interpretation;
+            //         $data['sample_name'] = $rslt->sample_name;
+            //         $dataPayload[] = $data;
+            // }
+
+            foreach ($shipmentsResponsesRlt as $rslt) {
+                // find the reference result
+                $refResult = $shipmentsRefResult->where('sample_name', $rslt->sample_name)->first();
+                if ($refResult) {
+                    $data = [];
+                    $data['sample_name'] = $refResult->sample_name;
+                    $data['reference_result'] = $refResult->reference_result;
+                    $data['control_line'] = $rslt->control_line ?? null;
+                    $data['verification_line'] = $rslt->verification_line ?? null;
+                    $data['longterm_line'] = $rslt->longterm_line ?? null;
+                    $data['result_interpretation'] = $rslt->result_interpretation;
+                    $dataPayload[] = $data;
                 }
             }
 
@@ -463,8 +473,124 @@ class PTShipmentController extends Controller
     }
 
 
+
+    // public function getShipmentResponseReport($id,  $is_part)
+    // {
+    //     $user = Auth::user();
+    //     Log::info("getShipmentResponseReport. ID: " . $id . " is_part: " . $is_part);
+    //     try {
+
+    //         $shipmentsResponses = DB::table("pt_shipements")->distinct()
+    //             ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
+    //             ->join('laboratory_pt_shipement', 'laboratory_pt_shipement.pt_shipement_id', '=', 'pt_shipements.id')
+    //             ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
+    //             ->join('laboratories', 'form_submissions.lab_id', '=', 'laboratories.id')
+    //             ->join('users', 'form_submissions.user_id', '=', 'users.id');
+
+    //         if ($is_part == 1) {
+    //             $shipmentsResponses = $shipmentsResponses->where('form_submissions.lab_id', $user->laboratory_id)
+    //                 ->where('form_submissions.pt_shipment_id', $id);
+    //         } else {
+    //             $shipmentsResponses = $shipmentsResponses->where('form_submissions.id', $id)
+    //                 ->where('form_submissions.pt_shipment_id', $id);
+    //         }
+
+    //         $shipmentsResponses = $shipmentsResponses->get([
+    //             "pt_shipements.id",
+    //             "pt_shipements.created_at as shipment_date",
+    //             "pt_shipements.code",
+    //             "pt_shipements.end_date",
+    //             "pt_shipements.pass_mark",
+    //             "pt_shipements.round_name as name",
+    //             "laboratories.id as lab_id",
+    //             "users.name as fname",
+    //             "users.second_name as sname",
+    //             "laboratories.phone_number",
+    //             "laboratories.lab_name",
+    //             "laboratories.email",
+    //             "form_submissions.id as ptsubmission_id",
+    //             "form_submissions.created_at as _first_submission_date",
+    //             "form_submissions.updated_at  as update_submission_date",
+    //             // "ptsubmissions.testing_date",
+    //             // "ptsubmissions.kit_expiry_date",
+    //             // "ptsubmissions.kit_date_received",
+    //             // "ptsubmissions.pt_lot_no",
+    //         ]);
+
+    //         //  one
+    //         $shipmentsRefResult = DB::table("pt_shipements")->distinct()
+    //             ->join('laboratory_pt_shipement', 'laboratory_pt_shipement.pt_shipement_id', '=', 'pt_shipements.id')
+    //             ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id')
+    //             ->where('pt_shipements.id', $id);
+
+    //         $shipmentsRefResult = $shipmentsRefResult->get([
+    //             "pt_samples.reference_result as reference_result",
+    //             "pt_samples.name as sample_name",
+    //             "pt_shipements.round_name as round_name"
+    //         ]);
+
+
+    //         //  two
+    //         $shipmentsResponsesRlt = DB::table("pt_shipements")->distinct()
+    //             ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
+    //             ->leftJoin('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'form_submissions.id')
+    //             ->join('pt_samples', 'pt_samples.ptshipment_id', '=', 'pt_shipements.id');
+
+
+    //         if ($is_part == 1) {
+    //             $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.lab_id', $user->laboratory_id)
+    //                 ->where('form_submissions.pt_shipment_id', $id);
+    //         } else {
+    //             $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.id', $id);
+    //         }
+
+    //         $shipmentsResponsesRlt = $shipmentsResponsesRlt->get([
+    //             "pt_submission_results.interpretation as result_interpretation",
+    //             "pt_samples.name as sample_name"
+    //         ]);
+
+
+    //         $dataPayload = [];
+    //         Log::info('shipmentsResponsesRlt::::  '.json_encode($shipmentsResponsesRlt));
+    //         Log::info('shipmentsRefResult::::  '.json_encode($shipmentsRefResult));
+    //         foreach ($shipmentsResponsesRlt as $rslt) {
+    //             // find the reference result
+    //             $refResult = $shipmentsRefResult
+    //                 ->where('sample_name', $rslt->sample_name)
+    //                 ->first();
+    //             if ($refResult) {
+    //                 $data = [];
+    //                 $data['sample_name'] = $refResult->sample_name;
+    //                 $data['reference_result'] = $refResult->reference_result;
+    //                 $data['result_interpretation'] = $rslt->result_interpretation;
+    //                 $dataPayload[] = $data;
+    //             }
+    //         }
+
+    //         return [
+    //             'metadata' => $shipmentsResponses, "results" => $dataPayload
+    //         ];
+    //     } catch (Exception $ex) {
+    //         return response()->json(['Message' => 'Could fetch report data: ' . $ex->getMessage()], 500);
+    //     }
+    // }
+
+
     public function getUserSampleResponseResult(Request $request)
     {
         return $this->geSamples($request->id);
+    }
+
+
+    // samples by shipment
+    public function getSamplesByShipment(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $samples = PtSample::where('ptshipment_id', $id)->get();
+            return $samples;
+        } catch (Exception $ex) {
+            return response()->json(['Message' => 'Could fetch samples: ' . $ex->getMessage()], 500);
+        }
     }
 }

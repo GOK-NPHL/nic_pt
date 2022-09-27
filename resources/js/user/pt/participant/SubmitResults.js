@@ -717,18 +717,6 @@ class SubmitResults extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>PT Sample ID</th>
-                                            {/* <th colSpan={3}>
-                                                <table>
-                                                    <tbody>
-                                                        <tr><td>Visual results</td></tr>
-                                                        <tr style={{ "display": "block ruby" }}>
-                                                            <td>Control(C) Line</td>
-                                                            <td>Verification(V) Line</td>
-                                                            <td>Long term(LT) Line</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </th> */}
                                             <th>Interpretation *</th>
                                         </tr>
                                     </thead>
@@ -739,47 +727,6 @@ class SubmitResults extends React.Component {
 
                                             return <tr key={uuidv4()}>
                                                 <td>{sample.sample_name}</td>
-                                                {/* <td ><input onChange={(event) => this.visualResultsHandler(event, sample.sample_id)}
-                                                    defaultChecked={
-
-                                                        // samples[sample.sample_id] = {
-                                                        //     "visual": { c: 0, v: 0, lt: 0 },
-                                                        //     "interpretation": null
-                                                        // }
-
-                                                        this.props.selectedElementHasSubmmisions
-                                                            &&
-                                                            Object.keys(this.state.samples).length !== 0
-                                                            &&
-                                                            this.state.samples[sample.sample_id]["visual"]['c'] == 1
-                                                            ? true : false
-
-                                                    }
-                                                    value="c" type="checkbox" /></td>
-                                                <td ><input onChange={(event) => this.visualResultsHandler(event, sample.sample_id)}
-                                                    defaultChecked={
-
-                                                        this.props.selectedElementHasSubmmisions
-                                                            &&
-                                                            Object.keys(this.state.samples).length !== 0
-                                                            &&
-                                                            this.state.samples[sample.sample_id]["visual"]['v'] == 1
-                                                            ? true : false
-
-                                                    }
-
-                                                    value="v" type="checkbox" /></td>
-                                                <td ><input onChange={(event) => this.visualResultsHandler(event, sample.sample_id)}
-                                                    defaultChecked={
-                                                        this.props.selectedElementHasSubmmisions
-                                                            &&
-                                                            Object.keys(this.state.samples).length !== 0
-                                                            &&
-                                                            this.state.samples[sample.sample_id]["visual"]['lt'] == 1
-                                                            ? true : false
-                                                    }
-
-                                                    value="lt" type="checkbox" /></td> */}
                                                 <td onChange={(event) => this.ptInterpretation(event, sample.sample_id)}>
                                                     <div className="form-check form-check-inline">
                                                         <input className="form-check-input" type="radio" value="lt"
