@@ -59,4 +59,27 @@ class QCParticipantController extends Controller
             return view('user.system.admin.readiness');
         }
     }
+
+
+    // --------
+
+    public function participantPTReportPage()
+    {
+
+        if (Gate::allows('view_pt_component')) {
+            return view('user.pt.participant.reports');
+        } else {
+            return view('user.general.dashboard');
+        }
+    }
+
+    public function getShipmentResponsePerformance()
+    {
+        return view('user.pt.reports.pt_perfornance_report');
+    }
+
+    public function getParticipantShipmentResponsePerformance()
+    {
+        return view('user.pt.reports.pt_participant_perfornance_report');
+    }
 }

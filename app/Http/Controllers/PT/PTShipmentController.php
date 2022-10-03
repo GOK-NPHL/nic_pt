@@ -385,7 +385,8 @@ class PTShipmentController extends Controller
 
             if ($is_part == 1) {
                 $shipmentsResponses = $shipmentsResponses->where('form_submissions.lab_id', $user->laboratory_id)
-                    ->where('form_submissions.pt_shipment_id', $id);
+                    // ->where('form_submissions.pt_shipment_id', $id);
+                    ->where('form_submissions.id', $id);
             } else {
                 $shipmentsResponses = $shipmentsResponses->where('form_submissions.id', $id);
             }

@@ -101,7 +101,7 @@ use Illuminate\Support\Facades\Gate;
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('participant-pt-reports') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Individual reports</p>
                                     </a>
