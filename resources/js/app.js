@@ -35,6 +35,7 @@ require('./user/pt/readiness/ReadinessResponse');
 require('./user/pt/participant/Dashboard');
 require('./user/pt/participant/Readiness');
 require('./user/pt/participant/Demographics');
+require('./user/pt/participant/Reports');
 ///////
 require('./user/pt/participant/SubmissionForm');
 ///////

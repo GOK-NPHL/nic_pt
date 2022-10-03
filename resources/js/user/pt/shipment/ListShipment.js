@@ -84,8 +84,8 @@ class ListShipment extends React.Component {
                     <td>{element.round_name}</td>
                     <td>{element.shipment_code}</td>
                     <td>{element.pass_mark}</td>
-                    <td>{element.participant_count}</td>
-                    <td>{element.last_update}</td>
+                    {this.props.isParticipant == true ? null : <td>{element.participant_count}</td>}
+                    <td>{new Date(element.last_update).toLocaleString('en-GB')}</td>
                     {
 
                         <td>
@@ -165,9 +165,9 @@ class ListShipment extends React.Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Round Name</th>
-                            <th scope="col">Shipement Code</th>
+                            <th scope="col">Shipment Code</th>
                             <th scope="col">Pass Mark</th>
-                            <th scope="col">Participant Count</th>
+                            {this.props.isParticipant==true ? null : <th scope="col">Participant Count</th>}
                             <th scope="col">Last Update</th>
                             <th scope="col">Action</th>
                         </tr>
