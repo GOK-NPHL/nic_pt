@@ -24,7 +24,7 @@
 
 <body style="background-image: url('{{asset('images/pt.png')}}');
             background-repeat: no-repeat;
-            background-size: cover; overflow: hidden;">
+            background-size: cover; overflow: hidden; overflow-y: scroll;">
     <div id="app">
 
         <main class="py-4">

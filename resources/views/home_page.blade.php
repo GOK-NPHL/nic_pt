@@ -24,7 +24,7 @@
 
 <body style="background-image: url('{{asset('images/pt.png')}}');
             background-repeat: no-repeat;
-            background-size: cover; height: 100%; overflow: hidden;">
+            background-size: cover; height: 100%; overflow: hidden; overflow-y: scroll;">
     <div>
 
         <main class="py-4">
@@ -39,7 +39,7 @@
                         </a> -->
 
 
-                        <a style="color: #FFF;" class="navbar-brand" href="/" title="{{ config('app.name', 'Laravel') }}">
+                        <a style="color: #FFF;" class="navbar-brand" href="/" title="{{ config('app.name', 'SARS-CoV2 PT') }}">
 
                             <div>
                                 <div class="float-left">
@@ -48,7 +48,7 @@
                                 <div class="float-right" style="font-size:0.8em;margin-left: 10px;">
                                     Ministry of health<br>
                                     National Public Health Laboratories<br>
-                                    RTRI
+                                    NIC - SARS-CoV2 PT
                                 </div>
                             </div>
                         </a>
@@ -61,16 +61,18 @@
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav ml-auto">
                                 <li style="background-color: purple;" class="nav-item active">
-                                    <a style="color: white;" class="nav-link" href="#">About Us
+                                    <a style="color: white;" class="nav-link" href="http://ept.nphl.go.ke">About Us
                                         <span class="sr-only">(current)</span>
                                     </a>
                                 </li>
-                                <li style="background-color: purple; color: white;" class="nav-item">
+                                <!-- <li style="background-color: purple; color: white;" class="nav-item">
                                     <a style="color: white;" class="nav-link" href="#">Library</a>
-                                </li>
-
+                                </li> -->
                                 <li style="background-color: purple;" class="nav-item">
-                                    <a style="color: white;" class="nav-link" href="#">Contact Us</a>
+                                    <a style="color: white;" class="nav-link" href="http://ept.nphl.go.ke">Contact Us</a>
+                                </li>
+                                <li style="background-color: purple;" class="nav-item">
+                                    <a style="color: white;" class="nav-link" href="/participant-signup">SIGN UP</a>
                                 </li>
                             </ul>
                         </div>
