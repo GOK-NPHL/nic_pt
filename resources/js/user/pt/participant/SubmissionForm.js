@@ -3,13 +3,7 @@ import ReactDOM from 'react-dom';
 import { FetchUserSamples, FetchReadnessSurvey, SubmitPT, GetSubmission } from '../../../components/utils/Helpers';
 
 function SubmissionForm() {
-    const [samples, setSamples] = React.useState([
-        // { id: 1, name: 'Sample 1' },
-        // { id: 2, name: 'Sample 2' },
-        // { id: 3, name: 'Sample 3' },
-        // { id: 4, name: 'Sample 4' },
-        // { id: 5, name: 'Sample 5' }
-    ]);
+    const [samples, setSamples] = React.useState([]);
     const [formResults, setFormResults] = React.useState({});
     const [shipId, setShipID] = React.useState('');
     const [loading, setLoading] = React.useState(true);
@@ -159,7 +153,7 @@ function SubmissionForm() {
                                             const sampleId = key.split('_')[1]
                                             if (!interpretations[sampleId]) interpretations[sampleId] = {}
                                             // check if other interpretation is selected
-                                            if(data['smpl_' + sampleId + '_interpretation_other'] && data['smpl_' + sampleId + '_interpretation_other'] != '') {
+                                            if (data['smpl_' + sampleId + '_interpretation_other'] && data['smpl_' + sampleId + '_interpretation_other'] != '') {
                                                 interpretations[sampleId]['interpretation'] = data['smpl_' + sampleId + '_interpretation_other']
                                             } else {
                                                 interpretations[sampleId]['interpretation'] = value
@@ -188,13 +182,13 @@ function SubmissionForm() {
                                                         <a className="nav-link active" href="#primary_info" aria-controls="primary_info" role="tab" data-toggle="tab">Primary Information</a>
                                                     </li>
                                                     <li role="presentation" className="nav-item">
+                                                        <a className="nav-link" href="#detection_methods" aria-controls="detection_methods" role="tab" data-toggle="tab">Detection Methods</a>
+                                                    </li>
+                                                    <li role="presentation" className="nav-item">
                                                         <a className="nav-link" href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a>
                                                     </li>
                                                     <li role="presentation" className="nav-item">
                                                         <a className="nav-link" href="#sample_prep" aria-controls="sample_prep" role="tab" data-toggle="tab">Sample Preparation</a>
-                                                    </li>
-                                                    <li role="presentation" className="nav-item">
-                                                        <a className="nav-link" href="#detection_methods" aria-controls="detection_methods" role="tab" data-toggle="tab">Detection Methods</a>
                                                     </li>
                                                     <li role="presentation" className="nav-item">
                                                         <a className="nav-link" href="#molecular_detection" aria-controls="molecular_detection" role="tab" data-toggle="tab">Molecular Detection</a>
@@ -283,6 +277,145 @@ function SubmissionForm() {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div role="tabpanel" className="tab-pane" id="detection_methods">
+                                                        <div className="row">
+                                                            <div className="col-md-12">
+                                                                <h3 className='mt-2 mb-1 text-center'>Detection Methods</h3>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
+                                                        <div className="row">
+                                                            <div className="col-md-12">
+                                                                <div className="table-responsive">
+                                                                    <table className="table table-bordered table-striped table-sm">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th style={{ verticalAlign: 'middle', maxWidth: '220px' }}>Method | Target gene(s)</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>Conventional / Real-time</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>In-house / Commercial</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>Assay</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>Algorithm</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>Machine brand / model name</th>
+                                                                                <th style={{ verticalAlign: 'middle' }}>Remarks</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {/* <td colSpan={7} className='text-center'>No data available</td> */}
+                                                                            {methods.map((method, mx) => {
+                                                                                return <tr key={method.id + "__" + mx}>
+                                                                                    <td style={{ verticalAlign: 'middle', display: 'flex', flexDirection: 'column', padding: '3px 0px' }}>
+                                                                                        <small style={{ textAlign: 'center', margin: '3px 0', padding: '4px', borderTop: '1px solid #ccb', fontWeight: 'bold', backgroundColor: 'wheat' }}>{method.name}</small>
+                                                                                        {new Array(3).fill(0).map((z, i) => (
+                                                                                            <>
+                                                                                                {/* <small style={{ textAlign: 'center', margin: '2px 0', padding: '4px', borderBottom: '1px solid #ccb' }} key={"dm_" + mx + "_spl_" + i}>{formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] ? formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] : (formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] || "Gene target " + (i + 1))}</small> */}
+                                                                                                <select
+                                                                                                    onChange={(ev) => {
+                                                                                                        handleInputChange(ev)
+                                                                                                    }}
+                                                                                                    value={formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] || ''}
+                                                                                                    className='form-control mb-1 mt-1' style={{ height: 'auto', padding: '1px 2px', }} name={'mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'}>
+                                                                                                    <option value=''>Gene target {i + 1}</option>
+                                                                                                    {dataDictionary['gene_option']?.map((item, index) => (
+                                                                                                        <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                                    ))}
+                                                                                                </select>
+                                                                                                {(formResults && formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] && formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] == dataDictionary['gene_option'].find(r => r.id == "other_gene_option").name) &&
+                                                                                                    <input type="text" onChange={(ev) => {
+                                                                                                        handleInputChange(ev)
+                                                                                                    }} className='form-control' style={{ height: 'auto', padding: '1px 2px', }} name={'mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'} value={formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other']} />}
+                                                                                            </>
+                                                                                        ))}
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_conventional_realtime`} value={formResults[`detection_method_${mx + 1}_conventional_realtime`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['conventional_real-time-options']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_inhouse_commercial`} value={formResults[`detection_method_${mx + 1}_inhouse_commercial`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['in-house_commercial-options']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em', maxWidth: '320px' }} name={`detection_method_${(mx + 1)}_assay_1`} value={formResults[`detection_method_${(mx + 1)}_assay_1`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['assay-options']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                        <br />
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control autocomplete' id="assay_2_dropdown" data-live-search="true" style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em', maxWidth: '320px' }} name={`detection_method_${(mx + 1)}_assay_2`} value={formResults[`detection_method_${(mx + 1)}_assay_2`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['assay-options-2']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_algorithm`} value={formResults[`detection_method_${mx + 1}_algorithm`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['algorithm_options']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                        {(formResults && formResults[`detection_method_${mx + 1}_algorithm`] && formResults[`detection_method_${mx + 1}_algorithm`] == dataDictionary['algorithm_options'].find(r => r.id == "others").name) &&
+                                                                                            <input type="text" onChange={(ev) => {
+                                                                                                handleInputChange(ev)
+                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_algorithm_other`} value={formResults[`detection_method_${mx + 1}_algorithm_other`] || ''} />}
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <select onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_machine_brand`} value={formResults[`detection_method_${mx + 1}_machine_brand`] || ''}>
+                                                                                            <option value=''>Select</option>
+                                                                                            {dataDictionary['brand_options']?.map((item, index) => (
+                                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                        {(formResults && formResults[`detection_method_${mx + 1}_machine_brand`] && formResults[`detection_method_${mx + 1}_machine_brand`] == dataDictionary['brand_options'].find(r => r.id == "others").name) &&
+                                                                                            <input type="text" onChange={(ev) => {
+                                                                                                handleInputChange(ev)
+                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_machine_brand_other`} value={formResults[`detection_method_${mx + 1}_machine_brand_other`] || ''} />}
+                                                                                    </td>
+                                                                                    <td style={{ verticalAlign: 'middle' }}>
+                                                                                        <textarea onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_remarks`} value={formResults[`detection_method_${mx + 1}_remarks`]} rows={3}></textarea>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            })}
+                                                                            <tr>
+                                                                                <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                                                                                    <small>Remarks</small>
+                                                                                </td>
+                                                                                <td colSpan={6} className='text-center'>
+                                                                                    <textarea onChange={(ev) => {
+                                                                                        handleInputChange(ev)
+                                                                                    }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_overall_remarks`} value={formResults[`detection_method_overall_remarks`] || ''} rows={3}></textarea>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div role="tabpanel" className="tab-pane" id="results">
                                                         <div className="row">
                                                             <div className="col-md-12">
@@ -306,30 +439,15 @@ function SubmissionForm() {
                                                                             <th style={{ verticalAlign: 'middle' }} rowSpan={3}>REMARKS/NOTES</th>
                                                                         </tr>
                                                                         <tr className="font-light">
-                                                                            {methods.map(method => (
-                                                                                <th style={{ verticalAlign: 'middle' }} key={method.id} colSpan={3}>{method.name}</th>
+                                                                            {methods.map((method, xm) => (
+                                                                                <th style={{ verticalAlign: 'middle' }} key={method.id + "_" + xm} colSpan={3}>{method.name}</th>
                                                                             ))}
                                                                         </tr>
                                                                         <tr className="font-light">
                                                                             {methods.map((method, mx) => {
                                                                                 return new Array(3).fill(0).map((z, i) => (
-                                                                                    <th style={{ verticalAlign: 'middle' }} key={`${method.id}_${i}`}>
-                                                                                        {/* Target {i + 1} */}
-                                                                                        <select
-                                                                                            onChange={(ev) => {
-                                                                                                handleInputChange(ev)
-                                                                                            }}
-                                                                                            value={formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] || ''}
-                                                                                            className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={'mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'}>
-                                                                                            <option value=''>Gene target {i + 1}</option>
-                                                                                            {dataDictionary['gene_option']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                        {(formResults && formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] && formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] == dataDictionary['gene_option'].find(r => r.id == "other_gene_option").name) &&
-                                                                                            <input type="text" onChange={(ev) => {
-                                                                                                handleInputChange(ev)
-                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={'mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'} value={formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other']} />}
+                                                                                    <th style={{ verticalAlign: 'middle' }} key={`${method.id}___${i}`}>
+                                                                                        <span style={{ textAlign: 'center', margin: '2px 0', padding: '4px', }} key={"dm_" + mx + "_spl_" + i}>{formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] ? formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] : (formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] || "Gene target " + (i + 1))}</span>
                                                                                     </th>
                                                                                 ))
                                                                             })}
@@ -354,13 +472,13 @@ function SubmissionForm() {
                                                                                     }}>
                                                                                         <option value=''>Select</option>
                                                                                         {dataDictionary['interpretation_options']?.map((item, index) => (
-                                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                                         ))}
                                                                                     </select>
                                                                                     {(formResults && formResults[`smpl_${sample.id}_interpretation`] && formResults[`smpl_${sample.id}_interpretation`] == dataDictionary['interpretation_options'].find(r => r.id == "others").name) &&
-                                                                                            <input type="text" onChange={(ev) => {
-                                                                                                handleInputChange(ev)
-                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`smpl_${sample.id}_interpretation_other`} value={formResults[`smpl_${sample.id}_interpretation_other`]} />}
+                                                                                        <input type="text" onChange={(ev) => {
+                                                                                            handleInputChange(ev)
+                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`smpl_${sample.id}_interpretation_other`} value={formResults[`smpl_${sample.id}_interpretation_other`]} />}
                                                                                 </td>
                                                                                 <td style={{ verticalAlign: 'middle' }}>
                                                                                     <textarea rows={1} onInput={(ev) => {
@@ -429,133 +547,11 @@ function SubmissionForm() {
                                                                             className='form-control' name='heat_inactivation_method'>
                                                                             <option value=''>Select</option>
                                                                             {dataDictionary?.heat_inactivation_method_options?.map((item, index) => (
-                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                             ))}
                                                                         </select>
                                                                     </div>
                                                                 </div></>}
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" className="tab-pane" id="detection_methods">
-                                                        <div className="row">
-                                                            <div className="col-md-12">
-                                                                <h3 className='mt-2 mb-1 text-center'>Detection Methods</h3>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-md-12">
-                                                                <div className="table-responsive">
-                                                                    <table className="table table-bordered table-striped table-sm">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th style={{ verticalAlign: 'middle', maxWidth: '220px' }}>Method | Target gene(s)</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>Conventional / Real-time</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>In-house / Commercial</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>Assay</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>Algorithm</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>Machine brand / model name</th>
-                                                                                <th style={{ verticalAlign: 'middle' }}>Remarks</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {/* <td colSpan={7} className='text-center'>No data available</td> */}
-                                                                            {methods.map((method, mx) => {
-                                                                                return <tr key={mx}>
-                                                                                    <td style={{ verticalAlign: 'middle', display: 'flex', flexDirection: 'column', padding: '3px 0px' }}>
-                                                                                        <small style={{ textAlign: 'center', margin: '3px 0', padding: '4px', borderTop: '1px solid #ccb', fontWeight: 'bold', backgroundColor: 'wheat' }}>{method.name}</small>
-                                                                                        {new Array(3).fill(0).map((z, i) => (
-                                                                                            <small style={{ textAlign: 'center', margin: '2px 0', padding: '4px', borderBottom: '1px solid #ccb' }} key={"dm_" + mx + "_spl_" + i}>{formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] ? formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt_other'] : (formResults['mthd_' + method.id + '_target_' + (i + 1) + '_gn_trgt'] || "Gene target " + (i + 1))}</small>
-                                                                                        ))}
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_conventional_realtime`} value={formResults[`detection_method_${mx + 1}_conventional_realtime`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['conventional_real-time-options']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_inhouse_commercial`} value={formResults[`detection_method_${mx + 1}_inhouse_commercial`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['in-house_commercial-options']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em', maxWidth: '320px' }} name={`detection_method_${(mx + 1)}_assay_1`} value={formResults[`detection_method_${(mx + 1)}_assay_1`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['assay-options']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                        <br />
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control autocomplete' id="assay_2_dropdown" data-live-search="true" style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em', maxWidth: '320px' }} name={`detection_method_${(mx + 1)}_assay_2`} value={formResults[`detection_method_${(mx + 1)}_assay_2`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['assay-options-2']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_algorithm`} value={formResults[`detection_method_${mx + 1}_algorithm`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['algorithm_options']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                        {(formResults && formResults[`detection_method_${mx + 1}_algorithm`] && formResults[`detection_method_${mx + 1}_algorithm`] == dataDictionary['algorithm_options'].find(r => r.id == "others").name) &&
-                                                                                            <input type="text" onChange={(ev) => {
-                                                                                                handleInputChange(ev)
-                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_algorithm_other`} value={formResults[`detection_method_${mx + 1}_algorithm_other`] || ''} />}
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <select onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_machine_brand`} value={formResults[`detection_method_${mx + 1}_machine_brand`] || ''}>
-                                                                                            <option value=''>Select</option>
-                                                                                            {dataDictionary['brand_options']?.map((item, index) => (
-                                                                                                <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
-                                                                                            ))}
-                                                                                        </select>
-                                                                                        {(formResults && formResults[`detection_method_${mx + 1}_machine_brand`] && formResults[`detection_method_${mx + 1}_machine_brand`] == dataDictionary['brand_options'].find(r => r.id == "others").name) &&
-                                                                                            <input type="text" onChange={(ev) => {
-                                                                                                handleInputChange(ev)
-                                                                                            }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_machine_brand_other`} value={formResults[`detection_method_${mx + 1}_machine_brand_other`] || ''} />}
-                                                                                    </td>
-                                                                                    <td style={{ verticalAlign: 'middle' }}>
-                                                                                        <textarea onChange={(ev) => {
-                                                                                            handleInputChange(ev)
-                                                                                        }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_${mx + 1}_remarks`} value={formResults[`detection_method_${mx + 1}_remarks`]} rows={3}></textarea>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            })}
-                                                                            <tr>
-                                                                                <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
-                                                                                    <small>Remarks</small>
-                                                                                </td>
-                                                                                <td colSpan={6} className='text-center'>
-                                                                                    <textarea onChange={(ev) => {
-                                                                                        handleInputChange(ev)
-                                                                                    }} className='form-control' style={{ height: 'auto', padding: '1px 2px', fontSize: '0.85em' }} name={`detection_method_overall_remarks`} value={formResults[`detection_method_overall_remarks`] || ''} rows={3}></textarea>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div role="tabpanel" className="tab-pane" id="molecular_detection">
@@ -577,7 +573,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='concerns_molecular_detection_launch'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['molecularconcerns-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -607,7 +603,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='specimen_sources'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['specimen_sources-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -637,7 +633,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='testing_all_specimens'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['yes_no_options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -681,7 +677,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='common_specimen_options'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['common-specimen-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -714,7 +710,7 @@ function SubmissionForm() {
                                                                                 className='form-control' name='daily_sample_load'>
                                                                                 <option value=''>Select</option>
                                                                                 {dataDictionary['daily-sample-load-options']?.map((item, index) => (
-                                                                                    <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                    <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                                 ))}
                                                                             </select>
                                                                         </div>
@@ -728,7 +724,7 @@ function SubmissionForm() {
                                                                                 className='form-control' name='maximum_daily_capacity'>
                                                                                 <option value=''>Select</option>
                                                                                 {dataDictionary['daily-sample-load-options']?.map((item, index) => (
-                                                                                    <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                    <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                                 ))}
                                                                             </select>
                                                                         </div>
@@ -760,7 +756,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='turnaround_time'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['tat-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -793,7 +789,7 @@ function SubmissionForm() {
                                                                                 className='form-control' name='bsl_pcr'>
                                                                                 <option value=''>Select</option>
                                                                                 {dataDictionary['bsl-pcr-options']?.map((item, index) => (
-                                                                                    <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                    <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                                 ))}
                                                                             </select>
                                                                         </div>
@@ -807,7 +803,7 @@ function SubmissionForm() {
                                                                                 className='form-control' name='bsl_virus_isolation'>
                                                                                 <option value=''>Select</option>
                                                                                 {dataDictionary['bsl-pcr-options']?.map((item, index) => (
-                                                                                    <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                                    <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                                 ))}
                                                                             </select>
                                                                         </div>
@@ -839,7 +835,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='quality_ctrl'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['qc-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
@@ -869,7 +865,7 @@ function SubmissionForm() {
                                                                         className='form-control' name='method_validation'>
                                                                         <option value=''>Select</option>
                                                                         {dataDictionary['respiratory-options']?.map((item, index) => (
-                                                                            <option key={item.id} value={item.name.trim()}>{item.name.trim()}</option>
+                                                                            <option key={item.id + "_" + index} value={item.name.trim()}>{item.name.trim()}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
