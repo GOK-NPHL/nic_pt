@@ -51,7 +51,7 @@ function SubmissionForm() {
                             } else {
                                 setData(data);
                                 setSamples(Array.from(data.samples, s => { return { id: s.sample_id, name: s.sample_name } }));
-                                setFormResults({ ...formResults, submission_deadline_date: data.end_date, dispatch_date: data.start_date });
+                                setFormResults({ ...formResults, submission_deadline_date: data.end_date, dispatch_date: data.start_date, tested_by: data.user_name, reported_by: data.user_name, });
                                 setLoading(false);
                             }
                         }

@@ -301,7 +301,7 @@ class PTShipmentController extends Controller
                     $payload[$lab->id] = [];
                     $payload[$lab->id]['samples'] = [];
                     $payload[$lab->id]['samples'][] = ['sample_name' => $lab->sample_name, 'sample_id' => $lab->sample_id];
-
+                    $payload[$lab->id]['user_name'] = $user->name . " " . $user->second_name ?? "";
                     $payload[$lab->id]['test_instructions'] = $lab->test_instructions;
                     $payload[$lab->id]['id'] = $lab->id;
                     $payload[$lab->id]['pt_shipements_id'] = $lab->pt_shipements_id;
