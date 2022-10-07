@@ -543,7 +543,7 @@ function SubmissionForm() {
                                                                             onChange={(ev) => {
                                                                                 handleInputChange(ev)
                                                                             }}
-                                                                            value={formResults['heat)inactivation_method'] || ''}
+                                                                            value={formResults['heat_inactivation_method'] || ''}
                                                                             className='form-control' name='heat_inactivation_method'>
                                                                             <option value=''>Select</option>
                                                                             {dataDictionary?.heat_inactivation_method_options?.map((item, index) => (

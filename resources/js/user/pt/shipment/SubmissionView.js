@@ -284,8 +284,7 @@ function SubmissionView() {
                                                                 <div className="form-group">
                                                                     <label>Method</label>
                                                                     <input readOnly
-
-                                                                        value={formResults['heat)inactivation_method'] || ''}
+                                                                        value={formResults['heat_inactivation_method'] || ''}
                                                                         className='form-control' name='heat_inactivation_method'
                                                                     />
                                                                 </div>
