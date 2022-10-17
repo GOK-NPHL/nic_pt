@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('Laboratory');
     }
+
+    public function lab(){
+        $lab = Laboratory::where('id',$this->laboratory_id)->first();
+        return $lab;
+    }
 }

@@ -50,6 +50,10 @@ use Illuminate\Support\Facades\Gate;
                     <a class="nav-link" style="color: white;" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
+            <div class="text-white" style="display: flex; flex-direction: column;">
+                <span title="{{ Auth::user()->email ?? '' }}">{{ Auth::user()->name ?? "" }} {{ Auth::user()->second_name ?? "" }}</span>
+                <span>{{ Auth::user()->lab()->lab_name ?? "" }}</span>
+            </div>
         </nav>
         <!-- /.navbar -->
 
