@@ -8,6 +8,7 @@ use App\PtSubmissionResult;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FormSubmissionController extends Controller
 {
@@ -44,10 +45,13 @@ class FormSubmissionController extends Controller
                 'result' => 'required',
             ]);
 
-            // check if the submission already exists
-            $submission = FormSubmission::where('pt_shipment_id', $request->pt_shipment_id)->first();
+            // check if the submission already exists for this shipment by this user
+            $submission = FormSubmission::where('pt_shipment_id', $request->pt_shipment_id)
+                ->where('user_id', $user->id)
+                ->first();
             if ($submission) {
-                return redirect()->back()->with('error', 'Submission for this shipment already exists');
+                Log::info('Submission already exists');
+                return response()->json(['message' => 'Submission already exists'], 400);
             }
 
             $submission = FormSubmission::create([
