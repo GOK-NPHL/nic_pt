@@ -78,10 +78,7 @@ class FormSubmissionController extends Controller
                     ]);
                 }
             }
-            
-
-            dd($request->all());
-
+        
             return response()->json([
                 'success' => true,
                 'message' => 'Submission created successfully',
