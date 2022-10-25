@@ -171,7 +171,7 @@ class Readiness extends React.Component {
                             {this.state.isUser ?
                                 <div className="form-group row">
                                     {new Date() > Date.parse(this.state.endDate) ?
-                                        <label style={{ "color": "red" }} className="col-sm-12">Past Due date. Submission diabled</label>
+                                        <label style={{ "color": "red" }} className="col-sm-12">Past Due date. Submission disabled</label>
                                         :
                                         ''}
                                 </div> :

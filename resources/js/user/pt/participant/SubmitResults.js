@@ -460,7 +460,7 @@ class SubmitResults extends React.Component {
                     </div>
                     <div className="col-sm-12 float-left">
                         {new Date() > Date.parse(this.state.endDate) ?
-                            <h3 style={{ "color": "red" }} className="col-sm-12">Past Due date. Submission diabled</h3>
+                            <h3 style={{ "color": "red" }} className="col-sm-12">Past Due date. Submission disabled</h3>
                             :
                             ''}
                     </div>
