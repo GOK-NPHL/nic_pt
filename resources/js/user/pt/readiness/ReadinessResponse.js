@@ -86,9 +86,8 @@ class ReadinessResponse extends React.Component {
 
         let tableElem = [];
 
-        if (this.state.data_f.length > 0) {
-
-            this.state.data_f.map((element, index) => {
+        if (Object.values(this.state.data_f).length > 0) {
+            Object.values(this.state.data_f).map((element, index) => {
                 tableElem.push(<tr key={index} style={{ fontSize: '16px' }}>
                     <th scope="row">{index + 1}</th>
                     <td>
@@ -100,9 +99,9 @@ class ReadinessResponse extends React.Component {
                     <td>{element.created_at ? new Date(element.created_at).toLocaleString('en-GB') : '-'}</td>
                     <td>{element.updated_at ? new Date(element.updated_at).toLocaleString('en-GB') : '-'}</td>
                     <td>
-                        {element.fname == null && element.sname == null && element.email == null ?
+                        {element.fname == null && element.sname == null ?
                             <span className='badge badge-danger' style={{ fontWeight: 500, backgroundColor: '#fc4545' }}>Not Responded</span> :
-                            <span style={{ textTransform: 'capitalize' }}>{element.fname} {element.sname} {element.email}</span>
+                            <span style={{ textTransform: 'capitalize' }}>{element.fname} {element.sname}</span>
                         }
                     </td>
                     <td>
@@ -148,18 +147,24 @@ class ReadinessResponse extends React.Component {
                     currElementsTableEl: tableElem
                 })
             }
-
+        }else{
+            tableElem.push(<tr key={uuidv4()} style={{ fontSize: '16px' }}>
+                <td colSpan="7" style={{ textAlign: 'center' }}>
+                    No readiness responses found
+                </td>
+            </tr>);
         }
+            
 
         let pageContent = <div id='user_table' className='row'>
-            <div className="col-md-12 row">
+            <div className="row w-full mb-3 mt-3">
                 <div className='col-md-8'>
                     <h3 className="float-left">Readiness response list</h3>
                 </div>
                 <div className='col-md-4' style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <button type="button" className="btn btn-success btn-sm mx-1" onClick={() => {
-                        if (this.state.data && this.state.data.length > 0) {
-                            let final_data = this.state.data.map(element => {
+                        if (this.state.data && Object.values(this.state.data).length > 0) {
+                            let final_data = Object.values(this.state.data).map(element => {
                                 return {
                                     'checklist name': element.name,
                                     'participant name': element.lab_name,
