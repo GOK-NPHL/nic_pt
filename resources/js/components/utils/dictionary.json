@@ -105,6 +105,10 @@
     ],
     "assay-options-2": [
         {
+            "name": "Seegene, Allplex™ SARS-CoV-2/FluA/FluB/RSV Assay",
+            "id": "seegene_allplex_sars_cov_2_flua_flub_rsv_assay"
+        },
+        {
             "name": "1drop Inc. 1copy™ COVID-19 qPCR Kit (CE-IVD) ",
             "id": "1drop_inc_1copy_covid_19_qpcr_kit_ce_ivd_56"
         },
