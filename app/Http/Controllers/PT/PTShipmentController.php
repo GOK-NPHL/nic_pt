@@ -448,7 +448,10 @@ class PTShipmentController extends Controller
                 // ->join('ptsubmissions', 'ptsubmissions.pt_shipements_id', '=', 'pt_shipements.id')
                 ->join('form_submissions', 'form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
                 ->leftJoin('pt_submission_results', 'pt_submission_results.ptsubmission_id', '=', 'form_submissions.id')
-                ->join('pt_samples', 'pt_samples.id', '=', 'pt_submission_results.sample_id');
+                ->join('pt_samples', 'pt_samples.id', '=', 'pt_submission_results.sample_id')
+                // pick only earliest for each sample
+                ->groupBy('pt_submission_results.sample_id')
+                ->orderBy('pt_submission_results.created_at', 'asc');
             if ($is_part == 1) {
                 $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.lab_id', $user->laboratory_id)
                     ->where('form_submissions.pt_shipment_id', $id);
