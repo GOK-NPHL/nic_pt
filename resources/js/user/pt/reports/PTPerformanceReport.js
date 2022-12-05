@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FetchShipmentResponsesReport, FetchAdminParams } from '../../../components/utils/Helpers';
-import ReactToPrint from "react-to-print";
+// import ReactToPrint from "react-to-print";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 import { matchPath } from "react-router";
 
@@ -140,15 +142,28 @@ class PTPerformanceReport extends React.Component {
                 <div className='container'>
                     <div className='row' style={{ padding: '16px 4px' }}>
                         <div className='col-md-12 py-3'>
-                            <ReactToPrint
+                            {/* <ReactToPrint
                                 documentTitle={"SARS-CoV2 PT Report"}
                                 trigger={() => <button className='btn btn-primary float-right'>Download report</button>}
                                 content={() => this.componentRef}
-                            />
+                            /> */}
+                            <button className='btn btn-primary float-right' onClick={() => {
+                                // pdf download of #printableArea with some margin
+                                var element = document.getElementById('printableArea');
+                                html2canvas(element).then((canvas) => {
+                                    var imgData = canvas.toDataURL('image/png');
+                                    var pdf = new jsPDF('p', 'mm', 'a4');
+                                    var width = pdf.internal.pageSize.getWidth();
+                                    var height = pdf.internal.pageSize.getHeight();
+                                    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+                                    pdf.save("SARS-CoV2 PROFICIENCY TESTING SCHEME REPORT.pdf");
+                                });
+
+                            }}>Download report</button>
                         </div>
                         <div className='col-md-12 w-100'>
 
-                            <table className="table table-condensed" style={{ verticalAlign: 'middle' }}
+                            <table className="table table-condensed" id="printableArea" style={{ verticalAlign: 'middle' }}
                                 ref={el => (this.componentRef = el)}>
                                 <tbody >
                                     <tr >

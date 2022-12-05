@@ -252,7 +252,7 @@ class PTShipmentController extends Controller
             ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
             ->leftJoin('form_submissions', function ($join) use ($user_id) {
                 $join
-                ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
+                    ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
                     ->on('form_submissions.lab_id', '=', 'laboratories.id')
                     ->orOn('form_submissions.user_id', '=', 'users.id');
             })
@@ -285,7 +285,7 @@ class PTShipmentController extends Controller
             ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
             ->leftJoin('form_submissions', function ($join) {
                 $join
-                ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
+                    ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
                     ->on('form_submissions.lab_id', '=', 'laboratories.id')
                     ->orOn('form_submissions.user_id', '=', 'users.id');
             })
@@ -391,7 +391,7 @@ class PTShipmentController extends Controller
     }
 
 
-    public function getShipmentResponseReport($id,  $is_part)
+    public function getShipmentResponseReport($id,  $is_participant)
     {
         $user = Auth::user();
         try {
@@ -403,10 +403,12 @@ class PTShipmentController extends Controller
                 ->join('laboratories', 'form_submissions.lab_id', '=', 'laboratories.id')
                 ->join('users', 'form_submissions.user_id', '=', 'users.id');
 
-            if ($is_part == 1) {
-                $shipmentsResponses = $shipmentsResponses->where('form_submissions.lab_id', $user->laboratory_id)
+            if ($is_participant == 1) {
+                $shipmentsResponses = $shipmentsResponses
+                    // ->where('form_submissions.lab_id', $user->laboratory_id)
+                    ->where('form_submissions.user_id', $user->id)
                     // ->where('form_submissions.pt_shipment_id', $id);
-                    ->where('form_submissions.id', $id);
+                    ->where('form_submissions.pt_shipment_id', $id);
             } else {
                 $shipmentsResponses = $shipmentsResponses->where('form_submissions.id', $id);
             }
@@ -452,8 +454,10 @@ class PTShipmentController extends Controller
                 // pick only earliest for each sample
                 ->groupBy('pt_submission_results.sample_id')
                 ->orderBy('pt_submission_results.created_at', 'asc');
-            if ($is_part == 1) {
-                $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.lab_id', $user->laboratory_id)
+            if ($is_participant == 1) {
+                $shipmentsResponsesRlt = $shipmentsResponsesRlt
+                    // ->where('form_submissions.lab_id', $user->laboratory_id)
+                    ->where('form_submissions.user_id', $user->id)
                     ->where('form_submissions.pt_shipment_id', $id);
             } else {
                 $shipmentsResponsesRlt = $shipmentsResponsesRlt->where('form_submissions.id', $id);
