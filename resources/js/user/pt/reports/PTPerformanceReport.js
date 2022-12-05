@@ -66,7 +66,7 @@ class PTPerformanceReport extends React.Component {
                         rptCode: response['metadata'][0].code,
                         shipmentDate: response['metadata'][0].shipment_date,
                         specimenReceiptDate: response['metadata'][0].kit_date_received,
-                        passMark: response['metadata'][0].pass_mark,
+                        passMark: response['metadata'][0].pass_mark ? response['metadata'][0].pass_mark : 100,
                         kitLotNumber: response['metadata'][0].pt_lot_no,
                         labName: response['metadata'][0].lab_name,
                         resultSubmissionDate: response['metadata'][0].update_submission_date,
@@ -136,6 +136,14 @@ class PTPerformanceReport extends React.Component {
             </tr>);
             totalSamples += 1;
         })
+
+        let pass_mark = this.state.passMark || 100;
+
+        let overallScore = (passedScore / totalSamples) * 100 || 0;
+        let overallPerformance = 'UNACCEPTABLE';
+        if (overallScore >= parseInt(pass_mark)) {
+            overallPerformance = 'ACCEPTABLE';
+        }
 
         return (
             <React.Fragment>
@@ -222,8 +230,8 @@ class PTPerformanceReport extends React.Component {
                                         <td style={paragraphStyle} colSpan={totalTableLength}>
                                             <strong>Expert comment:</strong> Thank you for participating in KNEQAS SARS-CoV2 PT.
                                             Your overall performance: Your EQA performance is <strong>
-                                                {Math.round((passedScore / totalSamples) * 100)}&#37; {Math.round((passedScore / totalSamples) * 100) >= this.state.passMark ? 'ACCEPATBLE' : 'UNACCEPATBE'}
-                                                </strong>. The
+                                                {overallScore}&#37; {overallPerformance}
+                                            </strong>. The
                                             expected performance outcome was {this.state?.passMark || 100}% whereby, each sample has an equal score.
 
                                         </td>
