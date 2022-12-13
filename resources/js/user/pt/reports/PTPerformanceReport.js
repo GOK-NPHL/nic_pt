@@ -65,12 +65,12 @@ class PTPerformanceReport extends React.Component {
                         results: response['results'],
                         rptCode: response['metadata'][0].code,
                         shipmentDate: response['metadata'][0].shipment_date,
-                        specimenReceiptDate: response['metadata'][0].kit_date_received,
+                        specimenReceiptDate: response['metadata'][0].panel_receipt_date,
                         passMark: response['metadata'][0].pass_mark ? response['metadata'][0].pass_mark : 100,
                         kitLotNumber: response['metadata'][0].pt_lot_no,
                         labName: response['metadata'][0].lab_name,
                         resultSubmissionDate: response['metadata'][0].update_submission_date,
-                        testingDate: response['metadata'][0].testing_date,
+                        testingDate: response['metadata'][0].reporting_date,
                         kitExpiration: response['metadata'][0].kit_expiry_date,
                         phoneNo: response['metadata'][0].phone_number,
                         userName: response['metadata'][0]?.fname + ' ' + response['metadata'][0]?.sname,
@@ -262,7 +262,7 @@ class PTPerformanceReport extends React.Component {
 
                                     <tr style={paragraphStyle} >
                                         <td colSpan={4} style={{ "textAlign": "left", "marginBottom": "0px" }} >
-                                            <strong>Documentation of Report Review:</strong>
+                                            <strong>Documentation of Report Review:</strong>&nbsp;
                                             We the undersigned, have read and reviewed the above SARS-CoV2 performance evaluation report. If the final score is less than {this.state?.passMark || 100}% we have downloaded the root cause analysis and corrective actions forms from ePT, completed, and attached them to this report. Performance report and any attachments must be filed and retained as documentation.
                                         </td>
                                     </tr>
@@ -281,7 +281,7 @@ class PTPerformanceReport extends React.Component {
                                                         <td className='text-left '>
                                                             <p style={{ margin: 0, padding: '2px 7px' }}>
                                                                 Irene Nachiro<br />
-                                                                Head, National Influenza Centre<br />
+                                                                Associate Coordinator, KNEQAS<br />
                                                                 Department of Laboratory Services - NPHL<br />
                                                                 P.O. Box 20750-00200<br />
                                                                 Nairobi, Kenya<br />
@@ -291,8 +291,8 @@ class PTPerformanceReport extends React.Component {
                                                         <td className='text-left '>
                                                             <p style={{ margin: 0, padding: '2px 7px' }}>
                                                                 Charity Maina<br />
-                                                                NPHL EQA Manager<br />
-                                                                National Public Health Laboratory<br />
+                                                                KNEQAS Manager<br />
+                                                                Department of Laboratory Services - NPHL<br />
                                                                 P.O. Box 20750-00200<br />
                                                                 Nairobi, Kenya<br />
                                                             </p>
@@ -308,20 +308,22 @@ class PTPerformanceReport extends React.Component {
                                             <hr />
                                         </td>
                                     </tr>
-                                    <tr style={{ "fontWeight": "bold" }} >
+                                    <tr style={paragraphStyle}>
                                         <td>
-                                            Final Report Authorized By:
+                                            Final Report Authorized By: &nbsp; <b><i>C.M.</i></b>
                                         </td>
                                         <td>
-                                            Date:
+                                            Date: &nbsp;
+                                            <span style={{"fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
                                         </td>
                                     </tr>
-                                    <tr style={{ "fontWeight": "bold" }} >
-                                        <td style={paragraphStyle} >
-                                            Final Results Released By:
+                                    <tr style={paragraphStyle}>
+                                        <td >
+                                            Final Results Released By: &nbsp; &nbsp; <b><i>I.N.</i></b>
                                         </td>
-                                        <td style={paragraphStyle} >
-                                            Date:
+                                        <td >
+                                            Date: &nbsp;
+                                            <span style={{"fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
                                         </td>
                                     </tr>
                                     <tr>

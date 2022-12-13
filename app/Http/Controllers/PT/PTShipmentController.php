@@ -427,6 +427,8 @@ class PTShipmentController extends Controller
                 "laboratories.lab_name",
                 "laboratories.email",
                 "form_submissions.id as ptsubmission_id",
+                "form_submissions.panel_receipt_date as panel_receipt_date",
+                "form_submissions.reporting_date as reporting_date",
                 "form_submissions.created_at as _first_submission_date",
                 "form_submissions.updated_at  as update_submission_date",
                 // "form_submissions.testing_date",
