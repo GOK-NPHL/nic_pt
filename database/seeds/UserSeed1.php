@@ -16,8 +16,8 @@ class UserSeed extends Seeder
         $dataUser = array(
 
             array(
-                'name' => 'Ndiithi Wachira',
-                'email' => 'duncanndiithi@yahoo.com',
+                'name' => 'NPHL',
+                'email' => 'defaultnphluser@yahoo.com',
                 'second_name' => 'User',
                 'has_qc_access' => true,
                 'has_pt_access' => true,
@@ -62,9 +62,9 @@ class UserSeed extends Seeder
         $dataAdmin = array(
             array(
                 'name' => 'NPHL EQA',
-                'email' => 'nphleqa@gmail.com',
+                'email' => 'dlskneqas@gmail.com',
                 'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm',
-                'phone_number' => '0710238034',
+                'phone_number' => '0721333444',
                 'is_admin' => true,
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
