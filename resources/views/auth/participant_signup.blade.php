@@ -97,6 +97,7 @@
                         <input type="submit" class="btn col-md-12 btn-lg btn-info" value="Sign up" />
                         <hr />
                         <p>Have an account? <a href="{{route('participant-login')}}">Log in</a></p>
+                        <p><a href="/password/reset">Forgot Password?</a></p>
                     </div>
 
                     <div>

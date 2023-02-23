@@ -57,6 +57,7 @@
                         </div>
                         <br />
                         &nbsp; &nbsp; No account? <a href="/participant-signup">Sign up</a> &nbsp; &nbsp; &nbsp;
+                        <a href="/password/reset" style="font-size:0.8em;color:white;">Forgot Password?</a>
                         <!-- <a href="/auth/reset-password" style="font-size:0.8em;color:white;">Forgot Password?</a> -->
                         <!--<a href="/contact-us" style="">Don't have a login ? Click here to contact us</a>-->
                         @if (Route::has('password.request'))
