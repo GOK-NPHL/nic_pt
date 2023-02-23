@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('home');
 // });
 
-// Auth::routes(['register' => false]);
-//Auth::routes();
+Auth::routes(['register' => false]);
+// Auth::routes();
 
 
 Route::get('/',  [CustomAuthController::class, 'index'])->name('home');
