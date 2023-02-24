@@ -160,7 +160,7 @@ class PTPerformanceReport extends React.Component {
                                 var element = document.getElementById('printableArea');
                                 html2canvas(element).then((canvas) => {
                                     var imgData = canvas.toDataURL('image/png');
-                                    var pdf = new jsPDF('p', 'mm', 'a4');
+                                    var pdf = new jsPDF('p', 'pt','a4',true);//'p', 'mm', 'a4');
                                     var width = pdf.internal.pageSize.getWidth();
                                     var height = pdf.internal.pageSize.getHeight();
                                     pdf.addImage(imgData, 'PNG', 0, 0, width, height);
