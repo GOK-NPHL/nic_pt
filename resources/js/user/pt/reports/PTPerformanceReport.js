@@ -163,7 +163,7 @@ class PTPerformanceReport extends React.Component {
                                     var pdf = new jsPDF('p', 'pt','a4',true);//'p', 'mm', 'a4');
                                     var width = pdf.internal.pageSize.getWidth();
                                     var height = pdf.internal.pageSize.getHeight();
-                                    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+                                    pdf.addImage(imgData, 'PNG', 1, 1, width, height,'','FAST');
                                     pdf.save("SARS-CoV2 PROFICIENCY TESTING SCHEME REPORT.pdf");
                                 });
 
@@ -175,7 +175,7 @@ class PTPerformanceReport extends React.Component {
                                 ref={el => (this.componentRef = el)}>
                                 <tbody >
                                     <tr >
-                                        <td colSpan={totalTableLength}>
+                                        <td colSpan={totalTableLength} style={{textAlign: 'center'}}>
                                             <img style={imgStyle} src={this.props.chart1}></img>
                                         </td>
                                     </tr>
