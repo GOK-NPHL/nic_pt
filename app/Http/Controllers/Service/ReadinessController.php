@@ -162,6 +162,8 @@ class ReadinessController extends Controller
                     $join->on('readiness_approvals.lab_id', '=', 'laboratory_readiness.laboratory_id');
                 })
                 ->where('laboratory_readiness.readiness_id', $request->id)
+                // group by approcal status and date responded
+                ->groupBy('readiness_approvals.id', 'readiness_answers.created_at')
                 ->get([
                     "readinesses.id",
                     "readinesses.start_date",
@@ -180,7 +182,7 @@ class ReadinessController extends Controller
                     "readiness_approvals.id as approved_id"
                 ]);
                 // filter out the duplicate records by user_id and lab_id
-                $readinesses = $readinesses->unique('email', 'readinesses.id');
+                $readinesses = $readinesses->unique('lab_id');
 
             return $readinesses;
         } catch (Exception $ex) {
