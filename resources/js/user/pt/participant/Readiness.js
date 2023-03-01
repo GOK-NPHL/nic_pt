@@ -14,13 +14,15 @@ class Readiness extends React.Component {
             message: '',
             id: '',
             lab_id: '',
+            lab_name: '',
             name: '',
             startDate: '',
             endDate: '1970-01-01',
             readinessItems: { 'questions': [], 'answers': [] },
             questionsAnswerMap: {},
             showSaveButton: false,
-            isUser: null
+            isUser: null,
+            isApproved: false,
         }
 
         this.questionAnswerHandler = this.questionAnswerHandler.bind(this);
@@ -87,16 +89,21 @@ class Readiness extends React.Component {
                 endDate = qstns[0].end_date;
                 name = qstns[0].name;
 
+                let approval = readinessItems.approval[0] || null;
+
+
                 this.setState({
                     id: readinessId,
                     name: name,
                     lab_id: qstns[0].lab_id,
+                    lab_name: qstns[0].lab_name,
                     startDate: startDate,
                     endDate: endDate,
                     showSaveButton: Date.parse(endDate) > new Date() && isUser,
                     questionsAnswerMap: questionsAnswerMap,
                     readinessItems: readinessItems,
                     isUser: isUser,
+                    isApproved: (approval != null && approval?.approval_status && approval?.approval_status == 1),
                 });
             }
 
@@ -147,12 +154,20 @@ class Readiness extends React.Component {
     }
 
     approveReadinessResponse() {
+        // if approvalStatus is true, prompt the user to confirm before proceeding
+        if (this.state.isApproved) {
+            if (!confirm("Are you sure you want to unapprove this readiness response?")) {
+                return;
+            }
+        }
         (async () => {
             let response = await ApproveReadinessAnswer(this.state.id, this.state.lab_id);
             this.setState({
                 message: response.data.Message,
             });
             $('#readinessFormModal').modal('toggle');
+            // refresh the page
+            if(window && window.location) window.location.reload();
         })();
     }
 
@@ -178,6 +193,15 @@ class Readiness extends React.Component {
                                 ''
                             }
 
+                            <div className="form-group row">
+                                <label htmlFor="u_name" className="col-sm-2 col-form-label">Laboratory</label>
+                                <div className="col-sm-10">
+                                    <input
+                                        value={this.state.lab_name}
+                                        readOnly
+                                        type="email" className="form-control" id="u_name" />
+                                </div>
+                            </div>
                             <div className="form-group row">
                                 <label htmlFor="u_name" className="col-sm-2 col-form-label">Name/Title</label>
                                 <div className="col-sm-10">
@@ -245,8 +269,8 @@ class Readiness extends React.Component {
 
                                         <a
                                             onClick={() => this.approveReadinessResponse()}
-                                            type="" className="d-inline m-2 btn btn-primary m">
-                                            Approve
+                                            type="" className={"d-inline m-2 btn "+(this.state.isApproved ? "btn-warning":"btn-primary")}>
+                                            {this.state.isApproved ? "Revoke approval" : "Approve"}
                                         </a>
                                         :
                                         ''

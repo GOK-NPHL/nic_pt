@@ -236,25 +236,38 @@ class PTReadinessController extends Controller
 
             $user = Auth::user();
 
-            $readinessAswers = ReadinessApproval::updateOrCreate(
+            // get current approval status
+            $readinessApproval = ReadinessApproval::select(
+                "readiness_approvals.id",
+                "readiness_approvals.approved",
+            )
+                ->where('readiness_approvals.lab_id', $request->lab_id)
+                ->where('readiness_approvals.readiness_id', $request->readiness_id)
+                ->first();
+            
+            // if approval status exists and is approved, toggle to not approved
+            if ($readinessApproval && $readinessApproval->approved) {
+                $readinessApproval->approved = 0;
+                $readinessApproval->save();
+            } else {
+                ReadinessApproval::updateOrCreate(
+                    [
+                        'lab_id' => $request->lab_id,
+                        'readiness_id' =>  $request->readiness_id
+                    ],
+                    [
+                        'lab_id' => $request->lab_id,
+                        'readiness_id' =>  $request->readiness_id,
+                        'admin_id' => $user->id,
+                        'approved' => 1
+                    ]
+                );
+            }
 
-                [
-                    'lab_id' => $request->lab_id,
-                    'readiness_id' =>  $request->readiness_id
 
-                ],
-                [
-                    'lab_id' => $request->lab_id,
-                    'readiness_id' =>  $request->readiness_id,
-                    'admin_id' => $user->id,
-                    'approved' => 1
-                ]
-
-            );
-
-            return response()->json(['Message' => 'Approval success'], 200);
+            return response()->json(['Message' => 'Approval status updated'], 200);
         } catch (Exception $ex) {
-            return response()->json(['Message' => 'Could not Approval success request:  ' . $ex->getMessage()], 500);
+            return response()->json(['Message' => 'Could not update approval status:  ' . $ex->getMessage()], 500);
         }
     }
 }

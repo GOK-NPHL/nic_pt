@@ -77,6 +77,8 @@ class ReadinessController extends Controller
                     "readinesses.name",
                     "readinesses.admin_id",
                     "laboratories.id as lab_id",
+                    "laboratories.lab_name as lab_name",
+                    "laboratories.mfl_code as mfl_code",
                     "readiness_questions.id as question_id",
                     "readiness_questions.question",
                     "readiness_questions.answer_options",
@@ -85,6 +87,21 @@ class ReadinessController extends Controller
                     "readiness_questions.qustion_type",
                     "readiness_questions.is_required"
                 ]);
+            
+            if(isset($request->labId)){
+                $lab_id = $request->labId;
+                $readinessApproval = DB::table("readiness_approvals")
+                    ->where('readiness_approvals.readiness_id', $request->id)
+                    ->where('readiness_approvals.lab_id', $lab_id)
+                    ->get(
+                        [
+                            "readiness_approvals.created_at as approval_date",
+                            "readiness_approvals.approved as approval_status",
+                        ]
+                );
+            }else{
+                $readinessApproval = [];
+            }
 
             $readinessesAswers = DB::table("readiness_answers")
                 ->distinct()->join('laboratories', 'readiness_answers.laboratory_id', '=', 'laboratories.id')
@@ -97,7 +114,7 @@ class ReadinessController extends Controller
                     "readiness_answers.answer"
                 ]);
 
-            return ['questions' => $readinesses, 'answers' => $readinessesAswers];
+            return ['questions' => $readinesses, 'answers' => $readinessesAswers, 'approval' => $readinessApproval];
         } catch (Exception $ex) {
             return response()->json(['Message' => 'Could fetch readiness list: ' . $ex->getMessage()], 500);
         }
