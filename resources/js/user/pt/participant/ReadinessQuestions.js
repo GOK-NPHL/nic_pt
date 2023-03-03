@@ -33,7 +33,7 @@ class ReadinessQuestions extends React.Component {
                 let qstElement =
                     <div key={id} className="form-group">
 
-                        <label className="float-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
+                        <label className="float-left text-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
                         <select
                             disabled={!this.props.isUser}
                             value={this.props.questionsAnswerMap[readiness['question_id']]}
@@ -52,7 +52,7 @@ class ReadinessQuestions extends React.Component {
                 let qstElement =
                     <div key={id} className="form-group">
 
-                        <label className="float-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
+                        <label className="float-left text-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
                         <input
                             readOnly={!this.props.isUser}
                             value={this.props.questionsAnswerMap[readiness['question_id']]}
@@ -75,7 +75,7 @@ class ReadinessQuestions extends React.Component {
             let qstElement =
                 <div key={uuidv4()} className="form-group">
 
-                    <label className="float-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
+                    <label className="float-left text-left" htmlFor={readiness['question_id']}>{readiness['question']}</label>
                     <textarea
                         readOnly={!this.props.isUser}
                         className="form-control"

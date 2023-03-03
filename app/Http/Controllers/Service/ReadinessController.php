@@ -69,7 +69,7 @@ class ReadinessController extends Controller
                 ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
                 ->where('readinesses.id', $request->id)
                 ->where($parameter, $condition)
-
+                ->orderBy('readiness_questions.id', 'Asc')
                 ->get([
                     "readinesses.id",
                     "readinesses.start_date",

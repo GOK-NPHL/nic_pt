@@ -122,12 +122,21 @@ class Readiness extends React.Component {
     saveAnswers() {
 
         for (const [key, element] of Object.entries(this.state.questionsAnswerMap)) {
-
-            if (element == '' || element == null) {
+            
+            let qn_required = this.state.readinessItems.questions.find(q => q.question_id == key)?.is_required || false;
+            if ((element == '' || element == null) && qn_required) {
                 this.setState({
                     message: "Please answer all questions"
                 })
+                $('#readinessFormModal').modal('show');
                 return;
+            }else{
+                console.log("All questions answered", element);
+                if(element == null || element == ''){
+                    // set default to blank string
+                    element = '<Not answered>';
+                    this.state.questionsAnswerMap[key] = '<Not answered>';
+                }
             }
         }
 
@@ -138,7 +147,6 @@ class Readiness extends React.Component {
         };
 
         (async () => {
-
             let response = await SaveSuveyAnswers(ansqwers);
             let showSaveButton = false;
             if (response.status == 500) {
