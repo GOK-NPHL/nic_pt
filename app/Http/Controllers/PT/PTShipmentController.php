@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PT;
 
+use App\FormSubmission;
 use App\Http\Controllers\Controller;
 use App\Laboratory;
 use App\PtSample;
@@ -252,7 +253,7 @@ class PTShipmentController extends Controller
             ->join('users', 'users.laboratory_id', '=', 'laboratories.id')
             ->leftJoin('form_submissions', function ($join) use ($user_id) {
                 $join
-                    ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
+                    ->on('form_submissions.pt_shipment_id', '=', 'pt_shipements.id')
                     ->on('form_submissions.lab_id', '=', 'laboratories.id')
                     ->orOn('form_submissions.user_id', '=', 'users.id');
             })
@@ -286,23 +287,20 @@ class PTShipmentController extends Controller
             ->leftJoin('form_submissions', function ($join) {
                 $join
                     ->on('pt_shipements.id', '=', 'form_submissions.pt_shipment_id')
-                    ->on('form_submissions.lab_id', '=', 'laboratories.id')
-                    ->orOn('form_submissions.user_id', '=', 'users.id');
+                    ->on('form_submissions.lab_id', '=', 'laboratories.id');
             })
             ->where('users.id', $user_id)
             ->union($shipments);
+            
         // ->orderBy('pt_shipements.end_date')
         // ->get();
 
         // show query
         // dd($shipments2->toSql());
+
         $shipments2 = $shipments2
             // ->orderBy('pt_shipements.end_date')
             ->get();
-
-        // dd(json_encode([
-        //     "shipments" => $shipments2
-        // ]));
 
         $payload = [];
         $sampleIds = [];

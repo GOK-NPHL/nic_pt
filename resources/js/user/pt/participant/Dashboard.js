@@ -44,8 +44,6 @@ class Dashboard extends React.Component {
         (async () => {
             let response = await FetchUserSamples();
             let readiness = await FetchReadnessSurvey();
-            console.log("readiness")
-            console.log(readiness)
             this.setState({
                 data: response,
                 readiness: readiness
@@ -137,8 +135,7 @@ class Dashboard extends React.Component {
             let submittedIndex = 1;
             let index = 0;
             for (const [key, element] of Object.entries(this.state.data)) {
-
-
+                // console.log('element '+key,element);
                 let datRow = <tr key={index++}>
                     <th scope="row">{element.form_submission_id == null ? unsubmittedIndex++ : submittedIndex++}</th>
                     <td>{element.round_name}</td>
