@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Pagination from "react-js-pagination";
-import { FetchShipmentResponses } from '../../../components/utils/Helpers';
+import { exportToExcel, FetchShipmentResponses } from '../../../components/utils/Helpers';
 import { matchPath } from "react-router";
 
 class ShipmentResponses extends React.Component {
@@ -49,7 +49,6 @@ class ShipmentResponses extends React.Component {
                     })
                     $('#readinessReponseModal').modal('toggle');
                 } else {
-
                     this.setState({
                         data: response
                     });
@@ -108,24 +107,24 @@ class ShipmentResponses extends React.Component {
 
                             {
                                 this.props.page == 'report' ?
-                                <>
-                                    <a
-                                        onClick={() => {
-                                            window.location.assign('/view-shipment-response/' + element.id + '/' + element.ptsubmission_id)
-                                        }}
-                                        data-toggle="tooltip" data-placement="top" title="View submission"
-                                        className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white">
-                                        <i className="fas fa-file"></i> View entry
-                                    </a> &nbsp;
-                                    <a
-                                        onClick={() => {
-                                            window.location.assign('/get-shipment-response-performance/' + element.ptsubmission_id)
-                                        }}
-                                        data-toggle="tooltip" data-placement="top" title="View performance report"
-                                        className="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm text-white">
-                                        <i className="fas fa-file-pdf"></i> Performance
-                                    </a> &nbsp;
-                                </>
+                                    <>
+                                        <a
+                                            onClick={() => {
+                                                window.location.assign('/view-shipment-response/' + element.id + '/' + element.ptsubmission_id)
+                                            }}
+                                            data-toggle="tooltip" data-placement="top" title="View submission"
+                                            className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white">
+                                            <i className="fas fa-file"></i> View entry
+                                        </a> &nbsp;
+                                        <a
+                                            onClick={() => {
+                                                window.location.assign('/get-shipment-response-performance/' + element.ptsubmission_id)
+                                            }}
+                                            data-toggle="tooltip" data-placement="top" title="View performance report"
+                                            className="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm text-white">
+                                            <i className="fas fa-file-pdf"></i> Performance
+                                        </a> &nbsp;
+                                    </>
                                     :
                                     <a
                                         onClick={() => {
@@ -160,17 +159,43 @@ class ShipmentResponses extends React.Component {
 
 
         let pageContent = <div id='user_table' className='row'>
-            <div className="col-sm-12 mb-3 mt-3">
-                <h3 className="float-left">Shipment response list</h3>
-                <button style={{ "color": "white" }} type="button"
-                    className="btn btn-success float-right"
-                    onClick={() => {
-                        this.props.page == 'report' ?
-                            window.location.assign('/pt-shipment-report-list') :
-                            window.location.assign('/pt-shipment')
+            <div className="col-sm-12 row">
+                <div className="col-sm-4 mb-3 mt-3">
+                    <h3 className="float-left">Shipment response list</h3>
+                </div>
+                <div className="col-sm-4 mb-3 mt-3">
+                    <button type="button" className="btn btn-success btn-sm mx-1" onClick={() => {
+                        if (this.state.data && Object.values(this.state.data).length > 0) {
+                            let final_data = Object.values(this.state.data).map(element => {
+                                return {
+                                    'round name': element.name,
+                                    'participant name': element.lab_name,
+                                    'date responded': element.created_at,
+                                    'respondent name': `${element.fname || ''} ${element.sname || ''}`,
+                                    'email': `${element.email || ''}`
+                                }
+                            })
+                            exportToExcel(final_data, 'Readiness response list');
+                        } else {
+                            console.error('No data to export');
+                            alert('No data to export')
+                        }
                     }}>
-                    ← back
-                </button>
+                        <i className='fa fa-download'></i>&nbsp;
+                        Excel/CSV
+                    </button>
+                </div>
+                <div className="col-sm-4 mb-3 mt-3">
+                    <button style={{ "color": "white" }} type="button"
+                        className="btn btn-success float-right"
+                        onClick={() => {
+                            this.props.page == 'report' ?
+                                window.location.assign('/pt-shipment-report-list') :
+                                window.location.assign('/pt-shipment')
+                        }}>
+                        ← back
+                    </button>
+                </div>
             </div>
             <div className='col-sm-12 col-md-12'>
                 <div className="form-group mb-2">
