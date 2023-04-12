@@ -59,10 +59,10 @@ class PTPerformanceReport extends React.Component {
                     })
                     $('#readinessReponseReportModal').modal('toggle');
                 } else {
-
+                    console.log('hh',response['results'])
                     this.setState({
                         data: response,
-                        results: response['results'],
+                        results: response['results'].sort((a,b)=>a?.sample_name>b?.sample_name),
                         rptCode: response['metadata'][0].code,
                         shipmentDate: response['metadata'][0].shipment_date,
                         specimenReceiptDate: response['metadata'][0].panel_receipt_date,
@@ -130,7 +130,11 @@ class PTPerformanceReport extends React.Component {
             ///////// SCORING ///////////
             results.push(<tr className='' key={uuidv4()} style={{ textTransform: 'uppercase' }}>
                 <td style={tdtyle}>{data.sample_name}</td>
-                <td style={{ verticalAlign: 'middle', textTransform: 'uppercase' }}>{data.result_interpretation ? data.result_interpretation : 'No Result'}</td>
+                <td style={{ verticalAlign: 'middle', textTransform: 'uppercase' }}>{
+                    data.result_interpretation ?
+                        data.result_interpretation :
+                        'No Result'
+                }</td>
                 <td style={{ verticalAlign: 'middle' }}>{data.reference_result}</td>
                 <td style={{ verticalAlign: 'middle' }}>{isPass ? 'ACCEPTABLE' : 'UNACCEPATBE'}</td>
             </tr>);
@@ -160,10 +164,10 @@ class PTPerformanceReport extends React.Component {
                                 var element = document.getElementById('printableArea');
                                 html2canvas(element).then((canvas) => {
                                     var imgData = canvas.toDataURL('image/png');
-                                    var pdf = new jsPDF('p', 'pt','a4',true);//'p', 'mm', 'a4');
+                                    var pdf = new jsPDF('p', 'pt', 'a4', true);//'p', 'mm', 'a4');
                                     var width = pdf.internal.pageSize.getWidth();
                                     var height = pdf.internal.pageSize.getHeight();
-                                    pdf.addImage(imgData, 'PNG', 1, 1, width, height,'','FAST');
+                                    pdf.addImage(imgData, 'PNG', 1, 1, width, height, '', 'FAST');
                                     pdf.save("SARS-CoV2 PROFICIENCY TESTING SCHEME REPORT.pdf");
                                 });
 
@@ -175,7 +179,7 @@ class PTPerformanceReport extends React.Component {
                                 ref={el => (this.componentRef = el)}>
                                 <tbody >
                                     <tr >
-                                        <td colSpan={totalTableLength} style={{textAlign: 'center'}}>
+                                        <td colSpan={totalTableLength} style={{ textAlign: 'center' }}>
                                             <img style={imgStyle} src={this.props.chart1}></img>
                                         </td>
                                     </tr>
@@ -314,7 +318,7 @@ class PTPerformanceReport extends React.Component {
                                         </td>
                                         <td>
                                             Date: &nbsp;
-                                            <span style={{"fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
+                                            <span style={{ "fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
                                         </td>
                                     </tr>
                                     <tr style={paragraphStyle}>
@@ -323,7 +327,7 @@ class PTPerformanceReport extends React.Component {
                                         </td>
                                         <td >
                                             Date: &nbsp;
-                                            <span style={{"fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
+                                            <span style={{ "fontWeight": "bold" }}>{this.state.testingDate ? new Date(this.state.testingDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
                                         </td>
                                     </tr>
                                     <tr>
