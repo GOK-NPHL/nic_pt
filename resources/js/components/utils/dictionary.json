@@ -105,6 +105,10 @@
     ],
     "assay-options-2": [
         {
+            "name": "EXON SARS-CoV-2 Real Time PCR Detection Kit",
+            "id": "exon_sars_cov_2_real_time_pcr_detection_kit"
+        },
+        {
             "name": "Seegene, Allplex™ SARS-CoV-2/FluA/FluB/RSV Assay",
             "id": "seegene_allplex_sars_cov_2_flua_flub_rsv_assay"
         },
