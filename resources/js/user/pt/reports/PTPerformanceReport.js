@@ -59,7 +59,6 @@ class PTPerformanceReport extends React.Component {
                     })
                     $('#readinessReponseReportModal').modal('toggle');
                 } else {
-                    console.log('hh',response['results'])
                     this.setState({
                         data: response,
                         results: response['results'].sort((a,b)=>a?.sample_name>b?.sample_name),
@@ -119,7 +118,11 @@ class PTPerformanceReport extends React.Component {
             let isPass = false;
             ///////// SCORING ///////////
             if (
-                data.result_interpretation == data.reference_result
+                (data.result_interpretation == data.reference_result)
+                // match negative and not detected
+                || (data.result_interpretation.toLowerCase().includes('negative') && data.reference_result.toLowerCase().includes('not detected'))
+                // match positive and detected
+                || (data.result_interpretation.toLowerCase().includes('positive') && (data.reference_result.toLowerCase().includes('detected') && !data.reference_result.toLowerCase().includes('not')))
             ) {
                 isPass = true;
                 passedScore += 1;
