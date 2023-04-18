@@ -105,6 +105,10 @@
     ],
     "assay-options-2": [
         {
+            "name": "Virusee Genobio Pharmaceuticals",
+            "id": "virusee_genobio_pharmaceuticals"
+        },
+        {
             "name": "EXON SARS-CoV-2 Real Time PCR Detection Kit",
             "id": "exon_sars_cov_2_real_time_pcr_detection_kit"
         },
