@@ -105,6 +105,9 @@
     ],
     "assay-options-2": [
         {
+            "name": "Liferiver Novel Coronavirus (2019-nCoV) Real Time RT-PCR Kit",
+            "id": "liferiver_novel_coronavirus_2019_ncov_real_time rt_pcr_kit"
+        {
             "name": "Virusee Genobio Pharmaceuticals",
             "id": "virusee_genobio_pharmaceuticals"
         },
