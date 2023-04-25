@@ -29,10 +29,6 @@
             "id": "oc43_detected"
         },
         {
-            "name": "SARS-CoV detected",
-            "id": "sars_cov_detected"
-        },
-        {
             "name": "Negative",
             "id": "negative"
         },
