@@ -28,6 +28,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['register' => false]);
 // Auth::routes();
 
+// redirect 'home' to 'participant-home'
+Route::get('/home', function () {
+    return redirect('/participant-home');
+});
 
 Route::get('/',  [CustomAuthController::class, 'index'])->name('home');
 Route::get('index', [CustomAuthController::class, 'index'])->name('index');
